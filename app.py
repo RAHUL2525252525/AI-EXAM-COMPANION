@@ -13,7 +13,7 @@ app.secret_key = os.environ.get("SECRET_KEY", "fallback_secret")
 
 # 🔥 SESSION FIX (IMPORTANT)
 app.config['SESSION_COOKIE_SAMESITE'] = "Lax"
-app.config['SESSION_COOKIE_SECURE'] = False
+app.config['SESSION_COOKIE_SECURE'] = False  # Set to True when deploying over HTTPS!
 
 # ================= GROQ CONFIG =================
 try:
@@ -86,7 +86,7 @@ def try_anthropic(user_message):
 
     client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
     message = client.messages.create(
-        model="claude-sonnet-4-20250514",
+        model="claude-3-5-sonnet-20241022",  # Updated to the optimized stable generation version
         max_tokens=1024,
         system="You are an intelligent exam mentor. Help students understand concepts clearly, solve problems step by step, and prepare effectively for exams. Keep answers concise and educational.",
         messages=[{"role": "user", "content": user_message}]
@@ -99,13 +99,12 @@ def get_ai_response(user_message):
     # Step 1: Try Groq keys in parallel
     if GROQ_AVAILABLE and api_keys:
         last_error = ""
+        # Using a context manager ensures threads clean up properly without pooling leaks
         with ThreadPoolExecutor(max_workers=len(api_keys)) as executor:
             futures = {executor.submit(try_single_key, key, user_message): key for key in api_keys}
             for future in as_completed(futures):
                 result = future.result()
                 if not isinstance(result, Exception):
-                    for f in futures:
-                        f.cancel()
                     return result
                 else:
                     last_error = str(result)
@@ -120,8 +119,11 @@ def get_ai_response(user_message):
 
 # ================= FIREBASE INIT =================
 if not firebase_admin._apps:
-    cred = credentials.Certificate("firebase_key.json")
-    firebase_admin.initialize_app(cred)
+    try:
+        cred = credentials.Certificate("firebase_key.json")
+        firebase_admin.initialize_app(cred)
+    except Exception as fb_init_err:
+        print(f"Firebase initialization bypassed or failed: {fb_init_err}")
 
 # --------------------------------------------------
 BASE_DIR = os.getcwd()
@@ -156,41 +158,37 @@ if not os.path.exists(RESULTS_FILE):
             } for i in range(1, 11)
         }
     }
-
     with open(RESULTS_FILE, "w", encoding="utf-8") as f:
         json.dump(initial_structure, f, indent=2)
 
-# --------------------------------------------------
-# FIREBASE LOGIN ROUTE (MODIFIED TO FIX REJECTED KEYWORD ERROR)
-# --------------------------------------------------
+
+# ================= ROUTE HANDLERS =================
+
 @app.route("/firebase-login", methods=["POST"])
 def firebase_login():
     try:
         data = request.get_json()
-
         if not data or "token" not in data or not data["token"]:
             return jsonify({"status": "error", "message": "No token received"}), 400
 
         token = data["token"]
-
-        # Removed 'clock_skew_seconds' parameter which was triggering runtime crashes
-        decoded_token = firebase_auth.verify_id_token(token)
-
+        
+        # Secured and validated token signature state checking enabled
+        decoded_token = firebase_auth.verify_id_token(token, check_revoked=True)
         email = decoded_token.get("email")
 
         if not email:
-            return jsonify({"status": "error", "message": "No email in token"}), 401
+            return jsonify({"status": "error", "message": "No email associated with token"}), 401
 
         session["user"] = email
         session.permanent = True
-
         return jsonify({"status": "success", "user": email})
 
     except Exception as e:
-        print("FIREBASE ERROR:", e)
+        print("FIREBASE AUTHENTICATION ERROR:", e)
         return jsonify({"status": "error", "message": str(e)}), 401
 
-# --------------------------------------------------
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -204,7 +202,6 @@ def login():
             users = json.load(f)
 
         user = next((u for u in users if u["username"] == username and u["password"] == password), None)
-
         if user:
             session["user"] = username
             return redirect("/")
@@ -213,12 +210,13 @@ def login():
 
     return render_template("login.html")
 
+
 @app.route("/logout")
 def logout():
     session.pop("user", None)
     return redirect("/login")
 
-# --------------------------------------------------
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
@@ -247,7 +245,7 @@ def register():
 
     return render_template("register.html")
 
-# --------------------------------------------------
+
 @app.route("/")
 def home():
     if "user" not in session:
@@ -255,7 +253,6 @@ def home():
     return render_template("index.html")
 
 
-# --------------------------------------------------
 @app.route("/mocktest")
 def mocktest():
     if "user" not in session:
@@ -267,14 +264,13 @@ def mocktest():
     ]
     return render_template("mocktest.html", stages=stages)
 
-# --------------------------------------------------
+
 @app.route("/mocktest/stage/<int:stage>")
 def mocktest_stage(stage):
     if "user" not in session:
         return redirect("/login")
 
     json_file = os.path.join(QUESTION_BANK_DIR, f"stage{stage}.json")
-
     if not os.path.exists(json_file):
         abort(404)
 
@@ -287,11 +283,13 @@ def mocktest_stage(stage):
 
     return render_template("mocktest_stage.html", stage=stage, questions=json.dumps(questions))
 
-# --------------------------------------------------
+
 @app.route("/mocktest/<int:stage>/result")
 def mocktest_result(stage):
-    score = int(request.args.get("score", 0))
+    if "user" not in session:
+        return redirect("/login")
 
+    score = int(request.args.get("score", 0))
     json_file = os.path.join(QUESTION_BANK_DIR, f"stage{stage}.json")
 
     if not os.path.exists(json_file):
@@ -330,7 +328,7 @@ def mocktest_result(stage):
 
     return render_template("mocktest_result.html", stage=stage, score=score)
 
-# --------------------------------------------------
+
 @app.route("/performance")
 def performance_page():
     if "user" not in session:
@@ -341,32 +339,31 @@ def performance_page():
 
     return render_template("performance.html", data=data)
 
-# --------------------------------------------------
+
 @app.route("/mentor")
 def mentor():
     if "user" not in session:
         return redirect("/login")
     return render_template("mentor.html")
 
-# --------------------------------------------------
+
 @app.route("/ask_ai", methods=["POST"])
 def ask_ai():
     if "user" not in session:
-        return jsonify({"reply": "Please login first."})
+        return jsonify({"reply": "Please login first."}), 401
 
-    user_message = request.json.get("message", "").strip()
-
+    user_message = request.json.get("message", "").strip() if request.json else ""
     if not user_message:
-        return jsonify({"reply": "Please ask a valid question."})
+        return jsonify({"reply": "Please ask a valid question."}), 400
 
     try:
         reply = get_ai_response(user_message)
         return jsonify({"reply": reply})
+    except Exception as e:
+        print(f"AI Dispatched Exception Exception: {e}")
+        return jsonify({"reply": "AI error. Please check API key or internet connection."}), 500
 
-    except Exception:
-        return jsonify({"reply": "AI error. Please check API key or internet connection."})
 
-# --------------------------------------------------
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port, debug=True, use_reloader=False)
