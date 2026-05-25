@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Mock Test - Stages | Nexus Terminal</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Outfit:wght@100;400;600;900&family=JetBrains+Mono&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #bc61ff;
+      --accent: #00f2ff;
+      --bg-main: #050608;
+      --glass: rgba(13, 16, 23, 0.7);
+      --border: rgba(255, 255, 255, 0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      background: var(--bg-main);
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      padding: 20px;
+    }
+
+    /* Ambient Background System */
+    .ambient-bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; }
+    .ambient-glow-1, .ambient-glow-2 { position: absolute; filter: blur(80px); opacity: 0.6; }
+    .ambient-glow-1 { top: -10%; right: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, var(--primary), transparent); animation: float 20s infinite alternate; }
+    .ambient-glow-2 { bottom: -10%; left: -10%; width: 40vw; height: 40vw; background: radial-gradient(circle, var(--accent), transparent); animation: float 25s infinite alternate-reverse; }
+
+    @keyframes float { 0% { transform: scale(1); } 100% { transform: scale(1.2); } }
+
+    /* UI Components */
+    .back-arrow {
+      position: fixed; top: 30px; left: 30px; font-family: 'JetBrains Mono'; font-size: 0.7rem; color: #fff; cursor: pointer; z-index: 100; padding: 8px 16px; border: 1px solid var(--border); border-radius: 100px; background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); letter-spacing: 2px;
+    }
+
+    h1 { font-size: 3rem; font-weight: 900; letter-spacing: -2px; text-transform: uppercase; background: linear-gradient(to right, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; z-index: 5; margin-bottom: 5px; text-align: center; }
+    .caption { font-family: 'JetBrains Mono'; font-size: 0.7rem; color: var(--accent); letter-spacing: 3px; margin-bottom: 30px; opacity: 0.8; z-index: 5; }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      max-height: 60vh;
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow-y: auto;
+      z-index: 5;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+
+    .terminal-header { font-family: 'JetBrains Mono'; font-size: 0.6rem; color: var(--primary); display: flex; justify-content: space-between; margin-bottom: 15px; opacity: 0.7; }
+
+    .stage-box {
+      width: 100%;
+      padding: 18px 20px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      cursor: pointer;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stage-box:hover {
+      background: rgba(188, 97, 255, 0.15);
+      border-color: var(--primary);
+      transform: scale(1.02);
+    }
+
+    /* Scrollbar */
+    .container::-webkit-scrollbar { width: 4px; }
+    .container::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+    @media(max-width: 768px) {
+      h1 { font-size: 2rem; }
+      .container { max-height: 70vh; padding: 20px; }
+      .back-arrow { top: 15px; left: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-bg">
+    <div class="ambient-glow-1"></div>
+    <div class="ambient-glow-2"></div>
+  </div>
+
+  <div class="back-arrow" onclick="history.back()">← Return To Dashboard</div>
+
+  <h1>MOCK TEST</h1>
+  <div class="caption">SELECT STAGE TO START</div>
+
+  <div class="container">
+    <div class="terminal-header">
+      <span>AI Exam Companion</span>
+      <span>READY ?</span>
+    </div>
+    
+    <!-- Iterative Stage Generation -->
+    <script>
+      for(let i = 1; i <= 10; i++) {
+        const stage = i.toString().padStart(2, '0');
+        document.write(`
+          <div class="stage-box" onclick="location.href='/mocktest/stage/${i}'">
+            <span>🚀 STAGE_${stage}</span>
+            <small style="opacity:0.5">-</small>
+          </div>
+        `);
+      }
+    </script>
+  </div>
+
+</body>
+</html>

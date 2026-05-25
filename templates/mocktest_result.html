@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mission Debrief | Nexus Terminal</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Outfit:wght@100;400;600;900&family=JetBrains+Mono&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --primary: #bc61ff;
+    --accent: #00f2ff;
+    --primary-glow: rgba(188, 97, 255, 0.4);
+    --bg-dark: #010103;
+    --glass: rgba(10, 10, 18, 0.85);
+    --border: rgba(188, 97, 255, 0.3);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background: var(--bg-dark);
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 20px;
+}
+
+/* --- NEURAL ENGINE BACKGROUND --- */
+.video-container {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    overflow: hidden;
+}
+
+video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.2) saturate(1.5) contrast(1.2);
+}
+
+.video-mask {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 0%, var(--bg-dark) 95%);
+    z-index: -1;
+}
+
+/* --- NAVIGATION --- */
+.back-arrow {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    font-family: 'JetBrains Mono';
+    font-size: 0.7rem;
+    color: var(--accent);
+    cursor: pointer;
+    z-index: 100;
+    padding: 10px 20px;
+    border: 1px solid var(--accent);
+    border-radius: 50px;
+    background: rgba(0, 242, 255, 0.05);
+    backdrop-filter: blur(10px);
+    transition: 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.back-arrow:hover {
+    background: var(--accent);
+    color: #000;
+    box-shadow: 0 0 20px var(--accent);
+}
+
+/* --- RESULT CARD --- */
+.result-card {
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    border-radius: 30px;
+    border: 1px solid var(--border);
+    padding: 50px 30px;
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    z-index: 1;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+    animation: fadeInUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.terminal-tag {
+    font-family: 'JetBrains Mono';
+    font-size: 0.65rem;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+    display: block;
+}
+
+.score {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 900;
+    margin-bottom: 5px;
+    background: linear-gradient(to right, #fff, var(--primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.percent {
+    font-family: 'JetBrains Mono';
+    font-size: 0.9rem;
+    color: var(--accent);
+    margin-bottom: 25px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.stars {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    letter-spacing: 5px;
+}
+
+.status {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.motivation {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.95rem;
+    color: #ccc;
+    line-height: 1.5;
+    padding: 20px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 15px;
+    border-left: 3px solid var(--primary);
+}
+
+/* Responsive adjustments */
+@media(max-width: 600px) {
+    .result-card { padding: 30px 20px; }
+    .score { font-size: 2.8rem; }
+    .back-arrow { top: 15px; left: 15px; font-size: 0.6rem; padding: 8px 15px; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="video-container">
+    <video autoplay muted loop playsinline>
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-neural-network-nodes-and-connections-34444-large.mp4">
+    </video>
+    <div class="video-mask"></div>
+</div>
+
+<div class="back-arrow" onclick="history.back()">< RETURN_TO_STAGING</div>
+
+<div class="result-card">
+    <span class="terminal-tag">MISSION_DEBRIEF_SYNCED</span>
+    
+    <div class="score" id="scoreText">-- / --</div>
+    <div class="percent" id="percentText">ANALYZING PERFORMANCE...</div>
+    
+    <div class="stars" id="starRating"></div>
+    <div class="status" id="statusText">...</div>
+    
+    <div class="motivation" id="motivationText">
+        Recalibrating neural nodes based on test results.
+    </div>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const scored = parseInt(params.get("score")) || 0;
+const total = 50;
+const percentage = Math.round((scored / total) * 100);
+
+document.getElementById("scoreText").innerText = `${scored} / ${total}`;
+document.getElementById("percentText").innerText = `${percentage}% EFFICIENCY`;
+
+let stars = "", status = "", motivation = "";
+
+if (percentage >= 80) {
+    stars = "⭐⭐⭐⭐⭐";
+    status = "OPTIMAL_LEVEL 🎯";
+    motivation = "Elite performance detected. Your neural pathways are perfectly aligned.";
+} else if (percentage >= 65) {
+    stars = "⭐⭐⭐⭐";
+    status = "STABLE_UPLINK 👍";
+    motivation = "Strong execution. Minor recalibration required for total mastery.";
+} else if (percentage >= 50) {
+    stars = "⭐⭐⭐";
+    status = "CORE_SYNCED 💪";
+    motivation = "Baseline metrics met. Consistent training will unlock higher tiers.";
+} else if (percentage >= 35) {
+    stars = "⭐⭐";
+    status = "WEAK_SIGNAL 📘";
+    motivation = "Signal interference detected. Review core data packets and retry.";
+} else {
+    stars = "⭐";
+    status = "CRITICAL_FAILURE 🚀";
+    motivation = "System reboot recommended. Every failure is a data point for future success.";
+}
+
+document.getElementById("starRating").innerText = stars;
+document.getElementById("statusText").innerText = status;
+document.getElementById("motivationText").innerText = motivation;
+</script>
+
+</body>
+</html>

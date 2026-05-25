@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stage {{ stage }} - Neural Evaluation</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Outfit:wght@100;400;600;900&family=JetBrains+Mono&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --primary: #bc61ff;
+    --accent: #00f2ff;
+    --primary-glow: rgba(188, 97, 255, 0.4);
+    --bg-dark: #010103;
+    --glass: rgba(10, 10, 18, 0.85);
+    --border: rgba(188, 97, 255, 0.25);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background: var(--bg-dark);
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 20px;
+}
+
+/* ── CHROMATIC COLOR-CHANGING BACKGROUND METAMORPHOSIS ── */
+.ambient-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+    background: var(--bg-dark);
+}
+
+.ambient-glow-1 {
+    position: absolute;
+    top: -20%;
+    right: -10%;
+    width: 70vw;
+    height: 70vw;
+    background: radial-gradient(circle, rgba(188, 97, 255, 0.15) 0%, rgba(0, 242, 255, 0.05) 45%, transparent 70%);
+    filter: blur(60px);
+    animation: fluidGlowOne 22s infinite alternate ease-in-out;
+}
+
+.ambient-glow-2 {
+    position: absolute;
+    bottom: -25%;
+    left: -10%;
+    width: 65vw;
+    height: 65vw;
+    background: radial-gradient(circle, rgba(0, 242, 255, 0.12) 0%, rgba(188, 97, 255, 0.04) 45%, transparent 70%);
+    filter: blur(80px);
+    animation: fluidGlowTwo 28s infinite alternate ease-in-out;
+}
+
+@keyframes fluidGlowOne {
+    0% { transform: translate(0px, 0px) scale(1) rotate(0deg); }
+    50% { transform: translate(3vw, 4vh) scale(1.08) rotate(180deg); }
+    100% { transform: translate(0px, 0px) scale(1) rotate(360deg); }
+}
+
+@keyframes fluidGlowTwo {
+    0% { transform: translate(0px, 0px) scale(1) rotate(0deg); }
+    50% { transform: translate(-4vw, -3vh) scale(1.12) rotate(-180deg); }
+    100% { transform: translate(0px, 0px) scale(1) rotate(-360deg); }
+}
+
+/* --- NAVIGATION & ROBOT --- */
+.back-arrow {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-family: 'JetBrains Mono';
+    font-size: 0.7rem;
+    color: #fff;
+    cursor: pointer;
+    z-index: 100;
+    padding: 8px 15px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(16px);
+    transition: all 0.25s;
+}
+
+.ai-robot {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    z-index: 10;
+    animation: floatRobot 4s ease-in-out infinite;
+}
+
+.ai-robot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: rgba(188, 97, 255, 0.1);
+}
+
+@keyframes floatRobot {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+/* --- TEST CONTAINER --- */
+.chat-container {
+    width: 100%;
+    max-width: 850px;
+    min-height: 70vh;
+    background: var(--glass);
+    backdrop-filter: blur(40px);
+    border-radius: 30px;
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    z-index: 5;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+    overflow: hidden;
+}
+
+.header {
+    padding: 25px 40px;
+    border-bottom: 1px dashed var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.header span { font-family: 'JetBrains Mono'; font-size: 0.7rem; color: var(--primary); }
+.header h2 { font-size: 1.5rem; font-weight: 900; background: linear-gradient(to right, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+.chat-body { padding: 40px; display: flex; flex-direction: column; gap: 20px; }
+
+.question-card { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 20px; padding: 25px; }
+
+.question { background: rgba(255, 255, 255, 0.9); color: #000; padding: 20px; border-radius: 12px; font-size: 1.1rem; font-weight: 600; margin-bottom: 25px; }
+
+.option { background: rgba(0, 0, 0, 0.4); padding: 18px 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 12px; cursor: pointer; transition: 0.3s; }
+
+.option:hover { background: rgba(188, 97, 255, 0.1); border-color: var(--primary); }
+
+.correct { border-color: #39ff8a !important; background: rgba(57, 255, 138, 0.1) !important; color: #39ff8a; }
+.wrong { border-color: #ff3e3e !important; background: rgba(255, 62, 62, 0.1) !important; color: #ff3e3e; }
+
+.explanation { margin-top: 20px; color: var(--accent); font-family: 'JetBrains Mono'; font-size: 0.85rem; padding: 15px; border-left: 2px solid var(--accent); background: rgba(0, 242, 255, 0.05); }
+
+@media(max-width: 600px) {
+    .chat-container { border-radius: 20px; }
+    .header { padding: 20px; }
+    .chat-body { padding: 20px; }
+    .question { font-size: 0.95rem; }
+    .option { font-size: 0.9rem; padding: 15px; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="ambient-bg">
+    <div class="ambient-glow-1"></div>
+    <div class="ambient-glow-2"></div>
+</div>
+
+<div class="back-arrow" onclick="history.back()">← Return To Dashboard</div>
+
+<div class="ai-robot">
+    <img src="/static/images/robo.jpg" alt="AI Guardian">
+</div>
+
+<div class="chat-container">
+    <div class="header">
+        <span>STAGE {{ stage }}</span>
+        <h2>AI EXAM COMPANION</h2>
+    </div>
+
+    <div class="chat-body" id="questionBox">
+    </div>
+</div>
+
+<script>
+const questions = {{ questions | safe }};
+let current = 0;
+let score = 0;
+let answered = {};
+
+function loadQuestion() {
+    const q = questions[current];
+    let html = `<div class="question-card">
+                    <div class="question">Q${current + 1}. ${q.question}</div>`;
+    q.options.forEach(opt => {
+        html += `<div class="option" onclick="handleClick(this)">${opt}</div>`;
+    });
+    html += `<div id="exp" class="explanation" style="display:none"></div></div>`;
+    document.getElementById("questionBox").innerHTML = html;
+}
+
+function handleClick(el) {
+    if (answered[current]) return;
+    answered[current] = true;
+    const q = questions[current];
+    const selected = el.innerText.trim();
+    const expBox = document.getElementById("exp");
+    document.querySelectorAll(".option").forEach(opt => {
+        if (opt.innerText.trim() === q.answer) opt.classList.add("correct");
+        if (opt === el && selected !== q.answer) opt.classList.add("wrong");
+    });
+    if (selected === q.answer) score++;
+    expBox.style.display = "block";
+    expBox.innerText = "DECRYPTION: " + q.explanation;
+    setTimeout(() => {
+        if (current < questions.length - 1) {
+            current++;
+            loadQuestion();
+        } else {
+            window.location.href = `/mocktest/{{ stage }}/result?score=${score}`;
+        }
+    }, 3000);
+}
+
+loadQuestion();
+</script>
+
+</body>
+</html>

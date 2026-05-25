@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Mentor | Workspace</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Google+Sans+Display:wght@500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* Premium Minimal Dark Palette — True Obsidian Base */
+      --bg-main:        #050608;
+      --bg-card:        rgba(13, 16, 23, 0.75);
+      --bg-input:       rgba(22, 26, 38, 0.6);
+      --border-subtle:  rgba(255, 255, 255, 0.05);
+      --border-focus:   #4f46e5;
+
+      /* High-fidelity Gemini Aura Spectrum */
+      --gemini-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 30%, #8b5cf6 65%, #ec4899 100%);
+      
+      --text-main:      #f9fafb;
+      --text-sub:       #9ca3af;
+      --text-muted:     #4b5563;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg-main);
+      color: var(--text-main);
+      font-family: 'Google Sans', sans-serif;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    /* ── CHROMATIC COLOR-CHANGING BACKGROUND METAMORPHOSIS ── */
+    .ambient-bg {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+      background: var(--bg-main);
+    }
+
+    /* Living fluid gradient node 1 */
+    .ambient-glow-1 {
+      position: absolute;
+      top: -20%;
+      right: -10%;
+      width: 70vw;
+      height: 70vw;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.16) 0%, rgba(139, 92, 246, 0.06) 40%, rgba(236, 72, 153, 0.02) 70%, transparent 100%);
+      filter: blur(60px);
+      animation: fluidGlowOne 20s infinite alternate ease-in-out;
+    }
+
+    /* Living fluid gradient node 2 */
+    .ambient-glow-2 {
+      position: absolute;
+      bottom: -25%;
+      left: -10%;
+      width: 65vw;
+      height: 65vw;
+      background: radial-gradient(circle, rgba(236, 72, 153, 0.12) 0%, rgba(139, 92, 246, 0.05) 45%, rgba(59, 130, 246, 0.01) 75%, transparent 100%);
+      filter: blur(80px);
+      animation: fluidGlowTwo 25s infinite alternate ease-in-out;
+    }
+
+    /* GPU-accelerated morphing paths for dynamic backdrop color shifting */
+    @keyframes fluidGlowOne {
+      0% {
+        transform: translate(0px, 0px) scale(1) rotate(0deg);
+        background: radial-gradient(circle, rgba(59, 130, 246, 0.18) 0%, rgba(139, 92, 246, 0.06) 40%, transparent 70%);
+      }
+      33% {
+        transform: translate(4vw, 5vh) scale(1.1) rotate(120deg);
+        background: radial-gradient(circle, rgba(139, 92, 246, 0.16) 0%, rgba(236, 72, 153, 0.08) 50%, transparent 70%);
+      }
+      66% {
+        transform: translate(-2vw, 8vh) scale(0.95) rotate(240deg);
+        background: radial-gradient(circle, rgba(236, 72, 153, 0.14) 0%, rgba(59, 130, 246, 0.08) 45%, transparent 70%);
+      }
+      100% {
+        transform: translate(0px, 0px) scale(1) rotate(360deg);
+        background: radial-gradient(circle, rgba(59, 130, 246, 0.18) 0%, rgba(139, 92, 246, 0.06) 40%, transparent 70%);
+      }
+    }
+
+    @keyframes fluidGlowTwo {
+      0% {
+        transform: translate(0px, 0px) scale(1) rotate(0deg);
+        background: radial-gradient(circle, rgba(236, 72, 153, 0.12) 0%, rgba(139, 92, 246, 0.05) 45%, transparent 70%);
+      }
+      50% {
+        transform: translate(-5vw, -4vh) scale(1.15) rotate(-180deg);
+        background: radial-gradient(circle, rgba(59, 130, 246, 0.14) 0%, rgba(236, 72, 153, 0.06) 40%, transparent 70%);
+      }
+      100% {
+        transform: translate(0px, 0px) scale(1) rotate(-360deg);
+        background: radial-gradient(circle, rgba(236, 72, 153, 0.12) 0%, rgba(139, 92, 246, 0.05) 45%, transparent 70%);
+      }
+    }
+
+    /* ── MODERN MINIMALIST RETURN NAVIGATION ── */
+    .back-arrow {
+      position: fixed;
+      top: 24px;
+      left: 24px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-sub);
+      cursor: pointer;
+      z-index: 100;
+      padding: 10px 20px;
+      border: 1px solid var(--border-subtle);
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      letter-spacing: 0.3px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .back-arrow:hover {
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text-main);
+      border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    /* ── GLASSMORPHIC CHAT WORKSPACE ── */
+    .chat-container {
+      position: relative;
+      z-index: 5;
+      width: 92%;
+      max-width: 950px;
+      height: 84vh;
+      background: var(--bg-card);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border-radius: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7),
+                  inset 0 1px 0 rgba(255,255,255,0.05);
+      overflow: hidden;
+    }
+
+    /* Seamless Gradient Identity Bar */
+    .chat-container::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--gemini-gradient);
+      z-index: 10;
+    }
+
+    .chat-header {
+      padding: 24px 36px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.005);
+    }
+
+    .chat-header h2 {
+      font-family: 'Google Sans Display', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .chat-header h2 span {
+      background: linear-gradient(90deg, #60a5fa, #a78bfa, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .status-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-sub);
+      background: rgba(255,255,255,0.03);
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 12px #10b981;
+      animation: pulse 2.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.9); }
+    }
+
+    /* ── MESSAGE HUD WINDOW ── */
+    .chat-box {
+      flex: 1;
+      padding: 36px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .message {
+      padding: 14px 22px;
+      border-radius: 20px;
+      max-width: 80%;
+      font-size: 0.95rem;
+      line-height: 1.55;
+      letter-spacing: 0.1px;
+    }
+
+    .user-message {
+      background: var(--text-main);
+      color: #050508;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+      font-weight: 500;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .bot-message {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-main);
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    /* AI Loading Bubble Graphic */
+    .loader-bubble {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 16px 22px;
+    }
+
+    .loader-dot {
+      width: 6px;
+      height: 6px;
+      background-color: var(--text-sub);
+      border-radius: 50%;
+      animation: bounce 1.4s infinite ease-in-out both;
+    }
+
+    .loader-dot:nth-child(1) { animation-delay: -0.32s; }
+    .loader-dot:nth-child(2) { animation-delay: -0.16s; }
+
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1.0); }
+    }
+
+    /* ── INTELLIGENT INPUT FOOTER ── */
+    .chat-input-area {
+      padding: 24px 36px 20px 36px;
+      background: rgba(4, 5, 7, 0.3);
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 6px 8px 6px 20px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Glow ring border accent logic */
+    .input-wrapper:focus-within {
+      border-color: transparent;
+      background: rgba(20, 24, 38, 0.8);
+      box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.5), 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    #user-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 12px 0;
+      color: var(--text-main);
+      font-family: 'Google Sans', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    #user-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    #send-btn {
+      width: 44px;
+      height: 44px;
+      background: var(--gemini-gradient);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      font-size: 1.05rem;
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    }
+
+    #send-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+      opacity: 0.95;
+    }
+
+    #send-btn:active {
+      transform: scale(0.97);
+    }
+
+    .chat-footer {
+      text-align: center;
+      padding-top: 14px;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+
+    /* Scrollbar Aesthetics */
+    .chat-box::-webkit-scrollbar { width: 5px; }
+    .chat-box::-webkit-scrollbar-track { background: transparent; }
+    .chat-box::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.05); border-radius: 20px; }
+    .chat-box::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.15); }
+
+    @media(max-width: 768px) {
+      .chat-container { height: 100vh; width: 100%; border-radius: 0; border: none; }
+      .chat-container::before { height: 4px; }
+      .back-arrow { top: 16px; left: 16px; padding: 8px 16px; font-size: 0.8rem; }
+      .chat-header { padding: 20px 24px; padding-top: 72px; }
+      .chat-box { padding: 24px; gap: 16px; }
+      .chat-input-area { padding: 16px 24px; }
+      .message { max-width: 88%; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-bg">
+    <div class="ambient-glow-1"></div>
+    <div class="ambient-glow-2"></div>
+  </div>
+
+  <div class="back-arrow" onclick="history.back()">
+    <span>←</span> Return to Dashboard
+  </div>
+
+  <div class="chat-container">
+    <header class="chat-header">
+      <h2>AI Mentor</h2>
+      <div class="status-area">
+        <span class="status-dot"></span>
+        Active Session
+      </div>
+    </header>
+
+    <div id="chat-box" class="chat-box">
+      <div class="message bot-message">System initialized. How can I assist your learning path today?</div>
+    </div>
+
+    <div class="chat-input-area">
+      <div class="input-wrapper">
+        <input id="user-input" type="text" placeholder="Ask a question..." autocomplete="off">
+        <button id="send-btn">➔</button>
+      </div>
+      <footer class="chat-footer">
+        AI Mentor Subsystem v2.0
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    const input = document.getElementById("user-input");
+    const button = document.getElementById("send-btn");
+    const chatBox = document.getElementById("chat-box");
+
+    function addMessage(text, className) {
+      const msg = document.createElement("div");
+      msg.classList.add("message", className);
+      msg.textContent = text;
+      chatBox.appendChild(msg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+      return msg;
+    }
+
+    function createLoaderBubble() {
+      const loader = document.createElement("div");
+      loader.classList.add("message", "bot-message", "loader-bubble");
+      loader.innerHTML = `
+        <div class="loader-dot"></div>
+        <div class="loader-dot"></div>
+        <div class="loader-dot"></div>
+      `;
+      chatBox.appendChild(loader);
+      chatBox.scrollTop = chatBox.scrollHeight;
+      return loader;
+    }
+
+    function typeEffect(element, text, speed = 15) {
+      let i = 0;
+      element.textContent = "";
+
+      function typing() {
+        if (i < text.length) {
+          element.textContent += text.charAt(i);
+          i++;
+          chatBox.scrollTop = chatBox.scrollHeight;
+          setTimeout(typing, speed);
+        }
+      }
+      typing();
+    }
+
+    async function sendMessage() {
+      const message = input.value.trim();
+      if (!message) return;
+
+      addMessage(message, "user-message");
+      input.value = "";
+
+      // Render the pulsing loading sequence dots instead of stagnant text
+      const loaderBubble = createLoaderBubble();
+
+      try {
+        const response = await fetch("/ask_ai", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: message })
+        });
+
+        const data = await response.json();
+        loaderBubble.remove();
+
+        const botMsg = addMessage("", "bot-message");
+        typeEffect(botMsg, data.reply, 15);
+
+      } catch (error) {
+        loaderBubble.remove();
+        addMessage("CRITICAL ERROR: UPLINK LOST.", "bot-message");
+      }
+    }
+
+    button.addEventListener("click", sendMessage);
+    input.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") sendMessage();
+    });
+  </script>
+
+</body>
+</html>
