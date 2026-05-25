@@ -412,11 +412,9 @@
   </div>
 
   <script>
-    const input    = document.getElementById("user-input");
-    const button   = document.getElementById("send-btn");
-    const chatBox  = document.getElementById("chat-box");
-
-    // ── Helpers ──────────────────────────────────────────────────────────────
+    const input   = document.getElementById("user-input");
+    const button  = document.getElementById("send-btn");
+    const chatBox = document.getElementById("chat-box");
 
     function addMessage(text, className) {
       const msg = document.createElement("div");
@@ -454,45 +452,10 @@
       typing();
     }
 
-    // ── Anthropic API fallback (called when Flask/Groq fails) ────────────────
-
-    async function getAnthropicReply(userMessage) {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 1000,
-          system: "You are an intelligent exam mentor. Help students understand concepts clearly, solve problems step by step, and prepare effectively for exams. Keep answers concise and educational.",
-          messages: [
-            { role: "user", content: userMessage }
-          ]
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error(`Anthropic API error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      // Extract the text from the response content array
-      const text = (data.content || [])
-        .map(block => block.type === "text" ? block.text : "")
-        .filter(Boolean)
-        .join("\n");
-
-      return text || "Sorry, I could not generate a response right now.";
-    }
-
-    // ── Main send logic ──────────────────────────────────────────────────────
-
     async function sendMessage() {
       const message = input.value.trim();
       if (!message) return;
 
-      // Disable input while waiting
       input.disabled = true;
       button.disabled = true;
 
@@ -501,55 +464,28 @@
 
       const loaderBubble = createLoaderBubble();
 
-      let reply = null;
-
-      // ── Step 1: Try Flask /ask_ai route (Groq backend) first ──
       try {
-        const flaskResponse = await fetch("/ask_ai", {
+        const response = await fetch("/ask_ai", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message: message })
         });
 
-        if (flaskResponse.ok) {
-          const flaskData = await flaskResponse.json();
+        const data = await response.json();
+        loaderBubble.remove();
 
-          // Only accept the reply if it's a real answer, not an error string
-          const isError = !flaskData.reply
-            || flaskData.reply.startsWith("AI failed")
-            || flaskData.reply.startsWith("AI error")
-            || flaskData.reply.startsWith("AI configuration error")
-            || flaskData.reply.startsWith("Please login");
+        const botMsg = addMessage("", "bot-message");
+        typeEffect(botMsg, data.reply, 15);
 
-          if (!isError) {
-            reply = flaskData.reply;
-          }
-        }
-      } catch (_) {
-        // Flask call failed or timed out — fall through to Anthropic
+      } catch (error) {
+        loaderBubble.remove();
+        addMessage("Could not reach server. Make sure Flask is running.", "bot-message");
+      } finally {
+        input.disabled = false;
+        button.disabled = false;
+        input.focus();
       }
-
-      // ── Step 2: Fallback to Anthropic API if Groq didn't succeed ──
-      if (!reply) {
-        try {
-          reply = await getAnthropicReply(message);
-        } catch (err) {
-          reply = "Connection error. Please check your internet and try again.";
-        }
-      }
-
-      // ── Render the final reply ──
-      loaderBubble.remove();
-      const botMsg = addMessage("", "bot-message");
-      typeEffect(botMsg, reply, 15);
-
-      // Re-enable input
-      input.disabled = false;
-      button.disabled = false;
-      input.focus();
     }
-
-    // ── Event listeners ──────────────────────────────────────────────────────
 
     button.addEventListener("click", sendMessage);
     input.addEventListener("keypress", (e) => {
