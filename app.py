@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, jsonify, abort, redirect, ses
 import json
 import os
 import random
-from groq import Groq
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # ================= FIREBASE ADMIN =================
@@ -16,7 +15,12 @@ app.secret_key = os.environ.get("SECRET_KEY", "fallback_secret")
 app.config['SESSION_COOKIE_SAMESITE'] = "Lax"
 app.config['SESSION_COOKIE_SECURE'] = False
 
-# ================= GROQ CONFIG (LOAD FROM CUSTOM FILE) =================
+# ================= GROQ CONFIG =================
+try:
+    from groq import Groq
+    GROQ_AVAILABLE = True
+except ImportError:
+    GROQ_AVAILABLE = False
 
 api_keys = []
 
@@ -35,7 +39,7 @@ try:
                     cleaned_line = cleaned_line.strip("'\"")
                     api_keys.append(cleaned_line)
 except Exception as file_err:
-    print(f"Error loading your api_keys file: {file_err}")
+    print(f"Error loading api_keys file: {file_err}")
 
 if not api_keys:
     env_keys = [
@@ -45,49 +49,73 @@ if not api_keys:
     ]
     api_keys = [k.strip() for k in env_keys if k and k.strip()]
 
+# ================= ANTHROPIC CONFIG =================
+try:
+    import anthropic
+    ANTHROPIC_AVAILABLE = True
+    ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "").strip()
+except ImportError:
+    ANTHROPIC_AVAILABLE = False
+    ANTHROPIC_API_KEY = ""
 
-# 🔥 LIGHTNING FAST PARALLEL AI CALLS
+
+# ── Groq worker ──────────────────────────────────────────────────────────────
 def try_single_key(key, user_message):
-    """Worker function to make a single fast API call."""
     try:
         client = Groq(api_key=key, timeout=4.0)
         completion = client.chat.completions.create(
             model="llama-3.1-8b-instant",
             messages=[
-                {"role": "system", "content": "You are an intelligent exam mentor. Answer clearly and shortly."},
+                {"role": "system", "content": "You are an intelligent exam mentor. Answer clearly and concisely."},
                 {"role": "user", "content": user_message}
             ],
             temperature=0.5,
-            max_tokens=150
+            max_tokens=300
         )
         return completion.choices[0].message.content.strip()
     except Exception as e:
         return e
 
 
-# ✅ FIXED: Returns immediately on first successful result,
-#    cancels remaining futures so a late-arriving error can't overwrite success.
+# ── Anthropic fallback ───────────────────────────────────────────────────────
+def try_anthropic(user_message):
+    if not ANTHROPIC_AVAILABLE:
+        raise Exception("anthropic package not installed. Run: pip install anthropic")
+    if not ANTHROPIC_API_KEY:
+        raise Exception("ANTHROPIC_API_KEY environment variable not set.")
+
+    client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+    message = client.messages.create(
+        model="claude-sonnet-4-20250514",
+        max_tokens=1024,
+        system="You are an intelligent exam mentor. Help students understand concepts clearly, solve problems step by step, and prepare effectively for exams. Keep answers concise and educational.",
+        messages=[{"role": "user", "content": user_message}]
+    )
+    return message.content[0].text.strip()
+
+
+# ── Main AI dispatcher ───────────────────────────────────────────────────────
 def get_ai_response(user_message):
-    if not api_keys:
-        return "AI configuration error: Your 'api_keys' file could not be read or contains no keys."
+    # Step 1: Try Groq keys in parallel
+    if GROQ_AVAILABLE and api_keys:
+        last_error = ""
+        with ThreadPoolExecutor(max_workers=len(api_keys)) as executor:
+            futures = {executor.submit(try_single_key, key, user_message): key for key in api_keys}
+            for future in as_completed(futures):
+                result = future.result()
+                if not isinstance(result, Exception):
+                    for f in futures:
+                        f.cancel()
+                    return result
+                else:
+                    last_error = str(result)
+        print(f"All Groq keys failed: {last_error} — falling back to Anthropic.")
 
-    last_error = "All API keys failed to return a response."
-
-    with ThreadPoolExecutor(max_workers=len(api_keys)) as executor:
-        futures = {executor.submit(try_single_key, key, user_message): key for key in api_keys}
-
-        for future in as_completed(futures):
-            result = future.result()
-            # If the result is not an Exception, we got a valid reply — return immediately
-            if not isinstance(result, Exception):
-                # Cancel all remaining pending futures
-                for f in futures:
-                    f.cancel()
-                return result
-            else:
-                last_error = str(result)
-
-    return f"AI failed on all API keys. Last encountered error: {last_error}"
+    # Step 2: Fallback to Anthropic
+    try:
+        return try_anthropic(user_message)
+    except Exception as e:
+        return f"AI unavailable. Error: {str(e)}"
 
 
 # ================= FIREBASE INIT =================
@@ -340,4 +368,4 @@ def ask_ai():
 # --------------------------------------------------
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port, debug=True)
+    app.run(host="0.0.0.0", port=port, debug=True, use_reloader=False)
