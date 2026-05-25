@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Chatbot</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Outfit', sans-serif;
+}
+
+/* BACKGROUND VIDEO */
+#bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.3) contrast(120%) grayscale(60%);
+  z-index: -2;
+  background: #000;
+}
+
+/* DARK OVERLAY */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  z-index: -1;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #000;
+  color: #fff;
+  overflow: hidden;
+}
+
+/* GLOWING PURPLE ORBS */
+.glow {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(170,0,255,0.3), transparent 70%);
+  filter: blur(120px);
+  z-index: -1;
+}
+.glow1 { top: -150px; left: -150px; }
+.glow2 { bottom: -150px; right: -150px; }
+
+/* CHAT CONTAINER */
+.chat-container {
+  width: 760px;
+  max-width: 95%;
+  height: 520px;
+  background: rgba(0,0,0,0.65);
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(170,0,255,0.5);
+  box-shadow:
+    0 0 60px rgba(170,0,255,0.4),
+    inset 0 0 30px rgba(255,255,255,0.05);
+  position: relative;
+  animation: fadeIn 0.8s ease;
+  overflow: hidden;
+}
+
+/* CHAT HEADER */
+.chat-header {
+  padding: 16px 22px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+.chat-header h2 {
+  font-size: 20px;
+  font-weight: 700;
+  background: linear-gradient(90deg,#8a00ff,#d000ff,#ffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 12px rgba(255,255,255,0.5);
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 12px rgba(255,255,255,0.9);
+}
+
+/* CHAT BOX */
+.chat-box {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: auto;
+}
+
+/* SCROLLBAR */
+.chat-box::-webkit-scrollbar {
+  width: 6px;
+}
+.chat-box::-webkit-scrollbar-thumb {
+  background: rgba(170,0,255,0.4);
+  border-radius: 10px;
+}
+
+/* MESSAGE BASE */
+.message {
+  max-width: 75%;
+  padding: 14px 18px;
+  font-size: 15px;
+  line-height: 1.6;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: transform 0.25s ease;
+}
+
+.message:hover { transform: scale(1.02); }
+
+/* USER MESSAGE */
+.message.user {
+  align-self: flex-end;
+  background: #000;
+  color: #fff;
+  box-shadow:
+    0 0 15px rgba(170,0,255,0.4),
+    inset 0 0 10px rgba(255,255,255,0.08);
+}
+
+/* BOT MESSAGE */
+.message.bot {
+  align-self: flex-start;
+  background: #fff;
+  color: #000;
+  box-shadow:
+    0 0 20px rgba(170,0,255,0.35),
+    inset 0 0 12px rgba(255,255,255,0.1);
+}
+
+/* INPUT AREA */
+.chat-input-area {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  border-top: 1px solid rgba(255,255,255,0.15);
+}
+
+.chat-input-area input {
+  flex: 1;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 12px;
+  padding: 14px;
+  color: #fff;
+  outline: none;
+}
+
+.chat-input-area input::placeholder {
+  color: #aaa;
+}
+
+.chat-input-area button {
+  padding: 0 18px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 12px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.chat-input-area button:hover {
+  box-shadow: 0 0 15px rgba(170,0,255,0.6);
+  transform: translateY(-2px);
+}
+
+/* FOOTER */
+.chat-footer {
+  text-align: center;
+  padding: 10px;
+  font-size: 12px;
+  color: #aaa;
+}
+
+/* ANIMATION */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@media(max-width: 800px){
+  .chat-container { height: 480px; }
+  .chat-box { padding: 16px; gap: 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Purple Glow Orbs -->
+<div class="glow glow1"></div>
+<div class="glow glow2"></div>
+
+<!-- Background Video -->
+<video autoplay muted loop id="bg-video">
+  <source src="your-black-grey-wave-video.mp4" type="video/mp4">
+</video>
+
+<div class="chat-container">
+  <div class="chat-header">
+    <div class="status-dot"></div>
+    <h2>AI Chatbot</h2>
+  </div>
+
+  <div class="chat-box">
+    <div class="message bot">Welcome! Ready to begin your exam preparation?</div>
+    <div class="message user">Yes, please start a mock test.</div>
+  </div>
+
+  <div class="chat-input-area">
+    <input type="text" placeholder="Type your message...">
+    <button>➤</button>
+  </div>
+
+  <div class="chat-footer">© 2026 AI Exam Companion</div>
+</div>
+
+</body>
+</html>
