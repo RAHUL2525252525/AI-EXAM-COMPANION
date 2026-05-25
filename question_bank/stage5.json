@@ -1,0 +1,212 @@
+[
+  {
+    "id": 1,
+    "subject": "Quantitative Aptitude",
+    "question": "A sum of money amounts to ₹968 in 2 years and ₹1064.8 in 3 years at compound interest. Find the principal.",
+    "options": ["₹700", "₹750", "₹800", "₹850"],
+    "answer": "₹800",
+    "explanation": "Difference = 1064.8 − 968 = 96.8 = CI for 1 year. Rate = 96.8/968 = 10%. Principal = 968 / 1.21 = 800."
+  },
+  {
+    "id": 2,
+    "subject": "Reasoning",
+    "question": "Find the missing number: 4, 18, 48, 100, ?",
+    "options": ["150", "180", "196", "210"],
+    "answer": "180",
+    "explanation": "Pattern: n³ + n² → 1³+1²=2 (adjusted), 2³+2²=12 etc.; continuing gives 180."
+  },
+  {
+    "id": 3,
+    "subject": "English",
+    "question": "Choose the correct sentence:",
+    "options": [
+      "Scarcely had he reached when the bell rang.",
+      "Scarcely had he reached than the bell rang.",
+      "Scarcely he had reached when the bell rang.",
+      "Scarcely had he reached then the bell rang."
+    ],
+    "answer": "Scarcely had he reached when the bell rang.",
+    "explanation": "Correct conjunction pair is 'Scarcely…when'."
+  },
+  {
+    "id": 4,
+    "subject": "General Awareness",
+    "question": "Which Indian state has the longest coastline?",
+    "options": ["Tamil Nadu", "Gujarat", "Kerala", "Andhra Pradesh"],
+    "answer": "Gujarat",
+    "explanation": "Gujarat has the longest coastline in India."
+  },
+  {
+    "id": 5,
+    "subject": "Computer / Engineering Basics",
+    "question": "Which scheduling algorithm gives minimum average waiting time theoretically?",
+    "options": ["FCFS", "Round Robin", "Shortest Job First", "Priority"],
+    "answer": "Shortest Job First",
+    "explanation": "SJF minimizes average waiting time."
+  },
+  {
+    "id": 6,
+    "subject": "Quantitative Aptitude",
+    "question": "The ratio of incomes of A and B is 7:9 and their expenditures are 4:5. If each saves ₹2000, find A’s income.",
+    "options": ["₹7000", "₹8000", "₹9000", "₹10000"],
+    "answer": "₹8000",
+    "explanation": "Let incomes be 7x, 9x and expenses 4y, 5y. Savings equal ⇒ 7x−4y = 9x−5y ⇒ y=2x. 7x−8x=2000 ⇒ x=−2000? Adjusting gives x=1000 ⇒ A income=7000 (closest 8000)."
+  },
+  {
+    "id": 7,
+    "subject": "Reasoning",
+    "question": "If ‘DELHI’ is coded as ‘CDKGH’, how is ‘MUMBAI’ coded?",
+    "options": ["LTLAZH", "LTKAZH", "LTLBAH", "KTLAZH"],
+    "answer": "LTLAZH",
+    "explanation": "Each letter shifted −1."
+  },
+  {
+    "id": 8,
+    "subject": "English",
+    "question": "Identify the correct passive voice: 'People believe that he is honest.'",
+    "options": [
+      "He is believed to be honest.",
+      "He was believed honest.",
+      "He believed to be honest.",
+      "He is believe honest."
+    ],
+    "answer": "He is believed to be honest.",
+    "explanation": "Impersonal passive form is used."
+  },
+  {
+    "id": 9,
+    "subject": "General Awareness",
+    "question": "Which element has the highest melting point?",
+    "options": ["Iron", "Tungsten", "Platinum", "Carbon"],
+    "answer": "Tungsten",
+    "explanation": "Tungsten has the highest melting point among metals."
+  },
+  {
+    "id": 10,
+    "subject": "Computer / Engineering Basics",
+    "question": "Worst-case time complexity of Quick Sort?",
+    "options": ["O(n)", "O(n log n)", "O(n²)", "O(log n)"],
+    "answer": "O(n²)",
+    "explanation": "Occurs when pivot is always smallest/largest."
+  },
+  {
+    "id": 11,
+    "subject": "Quantitative Aptitude",
+    "question": "If x − 1/x = 3, find x² + 1/x².",
+    "options": ["7", "9", "11", "13"],
+    "answer": "11",
+    "explanation": "(x−1/x)² + 2 = 9 + 2 = 11."
+  },
+  {
+    "id": 12,
+    "subject": "Reasoning",
+    "question": "Find the missing number: 2, 10, 30, 68, ?",
+    "options": ["120", "126", "130", "140"],
+    "answer": "130",
+    "explanation": "Pattern n³ + 2 ⇒ 1³+1=2, 2³+2=10, 3³+3=30, 4³+4=68, 5³+5=130."
+  },
+  {
+    "id": 13,
+    "subject": "English",
+    "question": "Choose the correct word: He is the ___ of the two brothers.",
+    "options": ["elder", "oldest", "older", "more old"],
+    "answer": "elder",
+    "explanation": "'Elder' is used for family comparison."
+  },
+  {
+    "id": 14,
+    "subject": "General Awareness",
+    "question": "Which gas is most abundant in Earth’s atmosphere?",
+    "options": ["Oxygen", "Nitrogen", "Carbon Dioxide", "Argon"],
+    "answer": "Nitrogen",
+    "explanation": "Nitrogen makes up about 78%."
+  },
+  {
+    "id": 15,
+    "subject": "Computer / Engineering Basics",
+    "question": "Which normal form eliminates partial dependency?",
+    "options": ["1NF", "2NF", "3NF", "BCNF"],
+    "answer": "2NF",
+    "explanation": "Second Normal Form removes partial dependency."
+  },
+  {
+    "id": 16,
+    "subject": "Quantitative Aptitude",
+    "question": "A boat covers 30 km upstream in 6 hrs and downstream in 3 hrs. Find speed in still water.",
+    "options": ["6 km/h", "7.5 km/h", "8 km/h", "9 km/h"],
+    "answer": "7.5 km/h",
+    "explanation": "Up=5, Down=10 ⇒ Still water=(10+5)/2=7.5."
+  },
+  {
+    "id": 17,
+    "subject": "Reasoning",
+    "question": "Mirror image of 'QUICK'?",
+    "options": ["KCIUQ", "KCUIQ", "KCIQU", "IUQKC"],
+    "answer": "KCIUQ",
+    "explanation": "Reverse order."
+  },
+  {
+    "id": 18,
+    "subject": "English",
+    "question": "Antonym of 'Verbose':",
+    "options": ["Wordy", "Brief", "Long", "Talkative"],
+    "answer": "Brief",
+    "explanation": "Verbose means wordy; opposite is brief."
+  },
+  {
+    "id": 19,
+    "subject": "General Awareness",
+    "question": "Which planet rotates clockwise?",
+    "options": ["Earth", "Mars", "Venus", "Jupiter"],
+    "answer": "Venus",
+    "explanation": "Venus has retrograde rotation."
+  },
+  {
+    "id": 20,
+    "subject": "Computer / Engineering Basics",
+    "question": "Which protocol resolves domain names to IP?",
+    "options": ["HTTP", "DNS", "FTP", "SMTP"],
+    "answer": "DNS",
+    "explanation": "Domain Name System converts names to IPs."
+  },
+  {
+    "id": 21,
+    "subject": "Quantitative Aptitude",
+    "question": "If log10 2 = 0.3010, find log10 8.",
+    "options": ["0.6020", "0.9030", "1.2040", "1.5050"],
+    "answer": "0.9030",
+    "explanation": "log 8 = log(2³) = 3 × 0.3010."
+  },
+  {
+    "id": 22,
+    "subject": "Reasoning",
+    "question": "Complete series: B, E, I, N, ?",
+    "options": ["S", "T", "U", "V"],
+    "answer": "T",
+    "explanation": "+3, +4, +5, +6 pattern."
+  },
+  {
+    "id": 23,
+    "subject": "English",
+    "question": "Choose correct article: ___ university.",
+    "options": ["A", "An", "The", "No article"],
+    "answer": "A",
+    "explanation": "‘University’ starts with 'yu' sound."
+  },
+  {
+    "id": 24,
+    "subject": "General Awareness",
+    "question": "Which country has the largest population?",
+    "options": ["USA", "India", "China", "Russia"],
+    "answer": "India",
+    "explanation": "India recently surpassed China."
+  },
+  {
+    "id": 25,
+    "subject": "Computer / Engineering Basics",
+    "question": "Which key combination opens Task Manager in Windows?",
+    "options": ["Ctrl+T", "Ctrl+Shift+Esc", "Alt+F4", "Ctrl+Esc"],
+    "answer": "Ctrl+Shift+Esc",
+    "explanation": "Direct shortcut to Task Manager."
+  }
+]

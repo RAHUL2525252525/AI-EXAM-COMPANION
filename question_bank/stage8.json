@@ -1,0 +1,207 @@
+[
+  {
+    "id": 1,
+    "subject": "Quantitative Aptitude",
+    "question": "A sum of money becomes ₹8640 in 2 years at compound interest rate 20% p.a. What is the principal?",
+    "options": ["6000", "6500", "7000", "7200"],
+    "answer": "6000",
+    "explanation": "Amount = P(1+R/100)^2 → 8640 = P(1.2)^2 = 1.44P → P = 8640/1.44 = 6000."
+  },
+  {
+    "id": 2,
+    "subject": "Reasoning",
+    "question": "Find the next number: 2, 6, 12, 20, 30, ?",
+    "options": ["40", "42", "44", "48"],
+    "answer": "42",
+    "explanation": "Pattern n(n+1): 1×2=2, 2×3=6, 3×4=12, 4×5=20, 5×6=30, 6×7=42."
+  },
+  {
+    "id": 3,
+    "subject": "English",
+    "question": "Choose the correct sentence:",
+    "options": [
+      "Neither of the boys were present.",
+      "Neither of the boys was present.",
+      "Neither of the boys are present.",
+      "Neither of the boys have present."
+    ],
+    "answer": "Neither of the boys was present.",
+    "explanation": "‘Neither’ is singular, so verb ‘was’ is used."
+  },
+  {
+    "id": 4,
+    "subject": "General Awareness",
+    "question": "Which layer of Earth lies between the crust and core?",
+    "options": ["Mantle", "Lithosphere", "Asthenosphere", "Troposphere"],
+    "answer": "Mantle",
+    "explanation": "The mantle is the thick middle layer of Earth."
+  },
+  {
+    "id": 5,
+    "subject": "Computer / Engineering Basics",
+    "question": "Which data structure follows LIFO principle?",
+    "options": ["Queue", "Stack", "Array", "Tree"],
+    "answer": "Stack",
+    "explanation": "Stack works on Last In First Out."
+  },
+  {
+    "id": 6,
+    "subject": "Quantitative Aptitude",
+    "question": "If the ratio of two numbers is 5:7 and their sum is 144, find the smaller number.",
+    "options": ["50", "55", "60", "65"],
+    "answer": "60",
+    "explanation": "5x+7x=144 → 12x=144 → x=12 → smaller=5x=60."
+  },
+  {
+    "id": 7,
+    "subject": "Reasoning",
+    "question": "Find the odd pair: (3,27), (4,64), (5,100), (6,216)",
+    "options": ["(3,27)", "(4,64)", "(5,100)", "(6,216)"],
+    "answer": "(5,100)",
+    "explanation": "Others are cubes; 100 is not 5³."
+  },
+  {
+    "id": 8,
+    "subject": "English",
+    "question": "Fill in the blank: He succeeded ___ hard work.",
+    "options": ["by", "through", "with", "from"],
+    "answer": "through",
+    "explanation": "Correct phrase is ‘succeeded through hard work’."
+  },
+  {
+    "id": 9,
+    "subject": "General Awareness",
+    "question": "Which vitamin is produced when skin is exposed to sunlight?",
+    "options": ["Vitamin A", "Vitamin B12", "Vitamin C", "Vitamin D"],
+    "answer": "Vitamin D",
+    "explanation": "Sunlight triggers Vitamin D synthesis."
+  },
+  {
+    "id": 10,
+    "subject": "Computer / Engineering Basics",
+    "question": "Which protocol is used to transfer web pages?",
+    "options": ["FTP", "HTTP", "SMTP", "SNMP"],
+    "answer": "HTTP",
+    "explanation": "HTTP is used for web communication."
+  },
+  {
+    "id": 11,
+    "subject": "Quantitative Aptitude",
+    "question": "Find the value of √(144 + 256).",
+    "options": ["18", "19", "20", "22"],
+    "answer": "20",
+    "explanation": "144+256=400 → √400=20."
+  },
+  {
+    "id": 12,
+    "subject": "Reasoning",
+    "question": "If SOUTH = 63 and NORTH = 75, then EAST = ?",
+    "options": ["40", "45", "48", "50"],
+    "answer": "45",
+    "explanation": "Sum of letter positions: E(5)+A(1)+S(19)+T(20)=45."
+  },
+  {
+    "id": 13,
+    "subject": "English",
+    "question": "Synonym of 'Meticulous':",
+    "options": ["Careless", "Precise", "Lazy", "Rough"],
+    "answer": "Precise",
+    "explanation": "Meticulous means very careful and precise."
+  },
+  {
+    "id": 14,
+    "subject": "General Awareness",
+    "question": "Which country is known as the Land of the Rising Sun?",
+    "options": ["China", "Japan", "Thailand", "Korea"],
+    "answer": "Japan",
+    "explanation": "Japan is called the Land of the Rising Sun."
+  },
+  {
+    "id": 15,
+    "subject": "Computer / Engineering Basics",
+    "question": "Which memory is fastest?",
+    "options": ["RAM", "Cache", "ROM", "Hard Disk"],
+    "answer": "Cache",
+    "explanation": "Cache memory is the fastest."
+  },
+  {
+    "id": 16,
+    "subject": "Quantitative Aptitude",
+    "question": "A train 200 m long passes a pole in 10 seconds. Speed?",
+    "options": ["54 km/h", "60 km/h", "72 km/h", "80 km/h"],
+    "answer": "72 km/h",
+    "explanation": "Speed=200/10=20 m/s → 20×18/5=72 km/h."
+  },
+  {
+    "id": 17,
+    "subject": "Reasoning",
+    "question": "Mirror time of 3:35?",
+    "options": ["8:25", "8:35", "9:25", "9:35"],
+    "answer": "8:25",
+    "explanation": "11:60 − 3:35 = 8:25."
+  },
+  {
+    "id": 18,
+    "subject": "English",
+    "question": "Antonym of 'Scarcity':",
+    "options": ["Shortage", "Abundance", "Rare", "Need"],
+    "answer": "Abundance",
+    "explanation": "Scarcity means lack; abundance means plenty."
+  },
+  {
+    "id": 19,
+    "subject": "General Awareness",
+    "question": "Which planet is known as the Red Planet?",
+    "options": ["Venus", "Mars", "Mercury", "Saturn"],
+    "answer": "Mars",
+    "explanation": "Mars appears red due to iron oxide."
+  },
+  {
+    "id": 20,
+    "subject": "Computer / Engineering Basics",
+    "question": "Which device converts digital signals to analog?",
+    "options": ["Router", "Modem", "Switch", "Hub"],
+    "answer": "Modem",
+    "explanation": "Modem performs modulation and demodulation."
+  },
+  {
+    "id": 21,
+    "subject": "Quantitative Aptitude",
+    "question": "Find LCM of 24 and 36.",
+    "options": ["48", "60", "72", "84"],
+    "answer": "72",
+    "explanation": "LCM of 24 and 36 is 72."
+  },
+  {
+    "id": 22,
+    "subject": "Reasoning",
+    "question": "Series: 4, 9, 16, 25, ?",
+    "options": ["30", "34", "36", "49"],
+    "answer": "36",
+    "explanation": "Squares: 2²,3²,4²,5²,6²."
+  },
+  {
+    "id": 23,
+    "subject": "English",
+    "question": "Choose correct: 'Hardly had I reached ___ the train left.'",
+    "options": ["than", "when", "then", "while"],
+    "answer": "when",
+    "explanation": "Correct pair: Hardly…when."
+  },
+  {
+    "id": 24,
+    "subject": "General Awareness",
+    "question": "Which instrument measures atmospheric pressure?",
+    "options": ["Thermometer", "Barometer", "Hygrometer", "Altimeter"],
+    "answer": "Barometer",
+    "explanation": "Barometer measures air pressure."
+  },
+  {
+    "id": 25,
+    "subject": "Computer / Engineering Basics",
+    "question": "Which is an example of system software?",
+    "options": ["MS Word", "Photoshop", "Windows OS", "Chrome"],
+    "answer": "Windows OS",
+    "explanation": "Operating systems are system software."
+  }
+]

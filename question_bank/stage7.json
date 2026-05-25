@@ -1,0 +1,207 @@
+[
+  {
+    "id": 1,
+    "subject": "Quantitative Aptitude",
+    "question": "A boat goes 30 km upstream in 5 hours and returns downstream in 3 hours. Find the speed of the stream.",
+    "options": ["1 km/h", "2 km/h", "3 km/h", "4 km/h"],
+    "answer": "2 km/h",
+    "explanation": "Upstream speed = 30/5 = 6 km/h, Downstream = 30/3 = 10 km/h. Stream speed = (10−6)/2 = 2 km/h."
+  },
+  {
+    "id": 2,
+    "subject": "Reasoning",
+    "question": "Find the next term: 1, 4, 9, 16, 25, ?",
+    "options": ["30", "36", "49", "64"],
+    "answer": "36",
+    "explanation": "Perfect squares: 1², 2², 3², 4², 5², 6²."
+  },
+  {
+    "id": 3,
+    "subject": "English",
+    "question": "Choose the correct sentence:",
+    "options": [
+      "Each of the players have a bat.",
+      "Each of the players has a bat.",
+      "Each of the players have bats.",
+      "Each of the players are having a bat."
+    ],
+    "answer": "Each of the players has a bat.",
+    "explanation": "‘Each’ is singular → use ‘has’."
+  },
+  {
+    "id": 4,
+    "subject": "General Awareness",
+    "question": "Which gas is most abundant in Earth's atmosphere?",
+    "options": ["Oxygen", "Carbon Dioxide", "Nitrogen", "Hydrogen"],
+    "answer": "Nitrogen",
+    "explanation": "Nitrogen makes up about 78% of the atmosphere."
+  },
+  {
+    "id": 5,
+    "subject": "Computer / Engineering Basics",
+    "question": "Which component stores BIOS?",
+    "options": ["RAM", "ROM", "Cache", "Hard Disk"],
+    "answer": "ROM",
+    "explanation": "BIOS firmware is stored in ROM."
+  },
+  {
+    "id": 6,
+    "subject": "Quantitative Aptitude",
+    "question": "Find the simple interest on Rs. 5000 at 8% per annum for 3 years.",
+    "options": ["1000", "1100", "1200", "1300"],
+    "answer": "1200",
+    "explanation": "SI = (P×R×T)/100 = (5000×8×3)/100 = 1200."
+  },
+  {
+    "id": 7,
+    "subject": "Reasoning",
+    "question": "If DOG = 26 and CAT = 24, what is BAT?",
+    "options": ["20", "22", "23", "25"],
+    "answer": "23",
+    "explanation": "D(4)+O(15)+G(7)=26. B(2)+A(1)+T(20)=23."
+  },
+  {
+    "id": 8,
+    "subject": "English",
+    "question": "Fill in the blank: She is afraid ___ spiders.",
+    "options": ["from", "of", "with", "by"],
+    "answer": "of",
+    "explanation": "Correct preposition is ‘afraid of’."
+  },
+  {
+    "id": 9,
+    "subject": "General Awareness",
+    "question": "Which organ purifies blood in the human body?",
+    "options": ["Heart", "Lungs", "Kidney", "Liver"],
+    "answer": "Kidney",
+    "explanation": "Kidneys filter waste from blood."
+  },
+  {
+    "id": 10,
+    "subject": "Computer / Engineering Basics",
+    "question": "Which topology connects all devices to a central hub?",
+    "options": ["Ring", "Bus", "Star", "Mesh"],
+    "answer": "Star",
+    "explanation": "Star topology uses a central hub/switch."
+  },
+  {
+    "id": 11,
+    "subject": "Quantitative Aptitude",
+    "question": "Solve: 48 ÷ 6 + 7 × 3",
+    "options": ["25", "27", "29", "31"],
+    "answer": "29",
+    "explanation": "48/6=8; 7×3=21; 8+21=29."
+  },
+  {
+    "id": 12,
+    "subject": "Reasoning",
+    "question": "Find the odd one: 64, 125, 216, 300",
+    "options": ["64", "125", "216", "300"],
+    "answer": "300",
+    "explanation": "Others are perfect cubes (4³,5³,6³)."
+  },
+  {
+    "id": 13,
+    "subject": "English",
+    "question": "Synonym of 'Reluctant':",
+    "options": ["Willing", "Eager", "Unwilling", "Happy"],
+    "answer": "Unwilling",
+    "explanation": "Reluctant means not willing."
+  },
+  {
+    "id": 14,
+    "subject": "General Awareness",
+    "question": "Which metal is liquid at room temperature?",
+    "options": ["Iron", "Mercury", "Copper", "Aluminum"],
+    "answer": "Mercury",
+    "explanation": "Mercury is liquid at room temperature."
+  },
+  {
+    "id": 15,
+    "subject": "Computer / Engineering Basics",
+    "question": "Which key combination copies text?",
+    "options": ["Ctrl+V", "Ctrl+C", "Ctrl+X", "Ctrl+Z"],
+    "answer": "Ctrl+C",
+    "explanation": "Ctrl+C copies selected text."
+  },
+  {
+    "id": 16,
+    "subject": "Quantitative Aptitude",
+    "question": "Area of a circle with radius 7 cm (π=22/7)?",
+    "options": ["144", "154", "164", "174"],
+    "answer": "154",
+    "explanation": "πr² = 22/7 × 7 × 7 = 154."
+  },
+  {
+    "id": 17,
+    "subject": "Reasoning",
+    "question": "Mirror image of 6:20 time?",
+    "options": ["5:40", "5:50", "6:40", "7:40"],
+    "answer": "5:40",
+    "explanation": "11:60 − 6:20 = 5:40."
+  },
+  {
+    "id": 18,
+    "subject": "English",
+    "question": "Antonym of 'Expand':",
+    "options": ["Grow", "Increase", "Shrink", "Stretch"],
+    "answer": "Shrink",
+    "explanation": "Shrink is opposite of expand."
+  },
+  {
+    "id": 19,
+    "subject": "General Awareness",
+    "question": "Which planet has the most moons?",
+    "options": ["Earth", "Mars", "Jupiter", "Venus"],
+    "answer": "Jupiter",
+    "explanation": "Jupiter has the highest number of known moons."
+  },
+  {
+    "id": 20,
+    "subject": "Computer / Engineering Basics",
+    "question": "Which storage device has no moving parts?",
+    "options": ["HDD", "SSD", "DVD", "Floppy"],
+    "answer": "SSD",
+    "explanation": "SSD uses flash memory, no moving parts."
+  },
+  {
+    "id": 21,
+    "subject": "Quantitative Aptitude",
+    "question": "Find HCF of 36 and 60.",
+    "options": ["6", "8", "10", "12"],
+    "answer": "12",
+    "explanation": "Common factors → 12 is highest."
+  },
+  {
+    "id": 22,
+    "subject": "Reasoning",
+    "question": "Find next letter: Z, X, U, Q, ?",
+    "options": ["M", "N", "O", "P"],
+    "answer": "L",
+    "explanation": "Reverse skipping pattern −2,−3,−4,−5."
+  },
+  {
+    "id": 23,
+    "subject": "English",
+    "question": "Choose correct: 'No sooner had he arrived ___ it started raining.'",
+    "options": ["than", "when", "then", "while"],
+    "answer": "than",
+    "explanation": "Correct pair: No sooner…than."
+  },
+  {
+    "id": 24,
+    "subject": "General Awareness",
+    "question": "Who invented the telephone?",
+    "options": ["Edison", "Newton", "Alexander Graham Bell", "Tesla"],
+    "answer": "Alexander Graham Bell",
+    "explanation": "Bell patented the telephone in 1876."
+  },
+  {
+    "id": 25,
+    "subject": "Computer / Engineering Basics",
+    "question": "Which language is used for database queries?",
+    "options": ["HTML", "CSS", "SQL", "Java"],
+    "answer": "SQL",
+    "explanation": "SQL is Structured Query Language."
+  }
+]

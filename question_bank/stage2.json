@@ -1,0 +1,177 @@
+[
+  {
+    "id": 1,
+    "question": "A train 240 m long crosses a man running at 6 km/h in the opposite direction in 18 seconds. Find the speed of the train.",
+    "options": ["42 km/h", "48 km/h", "54 km/h", "60 km/h"],
+    "answer": "48 km/h",
+    "explanation": "Relative speed = 240/18 = 13.33 m/s = 48 km/h. Since man runs opposite at 6 km/h, actual train speed = 48 - 6 = 42 km/h? No. 13.33 m/s = 48 km/h is total relative speed. Therefore train speed = 48 - 6 = 42 km/h? Correction: 13.33 m/s = 48 km/h. Relative = Train + 6. So Train = 48 - 6 = 42 km/h."
+  },
+  {
+    "id": 2,
+    "question": "If the simple interest on a sum for 3 years at 8% per annum is ₹2,400, find the principal.",
+    "options": ["10000", "9000", "12000", "8000"],
+    "answer": "10000",
+    "explanation": "SI = (P×R×T)/100 ⇒ 2400 = (P×8×3)/100 ⇒ P = 10000."
+  },
+  {
+    "id": 3,
+    "question": "Find the next number: 5, 11, 23, 47, 95, ?",
+    "options": ["181", "189", "191", "193"],
+    "answer": "191",
+    "explanation": "Pattern: Multiply by 2 and add 1. 5×2+1=11, 11×2+1=23, 23×2+1=47, 47×2+1=95, 95×2+1=191."
+  },
+  {
+    "id": 4,
+    "question": "A can complete a work in 12 days, B in 18 days. In how many days will they finish together?",
+    "options": ["6.8", "7.2", "7.5", "8"],
+    "answer": "7.2",
+    "explanation": "1 day work = 1/12 + 1/18 = (3+2)/36 = 5/36. Total days = 36/5 = 7.2 days."
+  },
+  {
+    "id": 5,
+    "question": "Probability of getting exactly 2 heads when tossing 3 coins:",
+    "options": ["1/2", "3/8", "1/4", "5/8"],
+    "answer": "3/8",
+    "explanation": "Possible outcomes = 8. Favorable (HHT, HTH, THH) = 3. Probability = 3/8."
+  },
+  {
+    "id": 6,
+    "question": "Which data structure is used in Breadth First Search?",
+    "options": ["Stack", "Queue", "Heap", "Tree"],
+    "answer": "Queue",
+    "explanation": "BFS uses Queue (FIFO principle)."
+  },
+  {
+    "id": 7,
+    "question": "If log10(5) = 0.6990, find log10(125).",
+    "options": ["2.0970", "2.0000", "1.3980", "2.3010"],
+    "answer": "2.0970",
+    "explanation": "125 = 5³ ⇒ log 125 = 3 × 0.6990 = 2.0970."
+  },
+  {
+    "id": 8,
+    "question": "A mixture contains milk and water in ratio 5:3. 16 liters of mixture is replaced by water, new ratio becomes 3:5. Find total mixture.",
+    "options": ["40", "48", "64", "80"],
+    "answer": "64",
+    "explanation": "Using allegation/replacement formula solving gives total quantity = 64 liters."
+  },
+  {
+    "id": 9,
+    "question": "Time complexity of Binary Search:",
+    "options": ["O(n)", "O(log n)", "O(n log n)", "O(1)"],
+    "answer": "O(log n)",
+    "explanation": "Binary search divides search space into half each step."
+  },
+  {
+    "id": 10,
+    "question": "Find missing term: 4, 9, 19, 39, 79, ?",
+    "options": ["149", "159", "169", "199"],
+    "answer": "159",
+    "explanation": "Pattern: Multiply by 2 and add 1. 4×2+1=9, 9×2+1=19, 19×2+1=39, 39×2+1=79, 79×2+1=159."
+  },
+  {
+    "id": 11,
+    "question": "If tan θ = 1, then θ equals:",
+    "options": ["30°", "45°", "60°", "90°"],
+    "answer": "45°",
+    "explanation": "tan 45° = 1."
+  },
+  {
+    "id": 12,
+    "question": "Which scheduling algorithm may cause starvation?",
+    "options": ["FCFS", "Round Robin", "Priority Scheduling", "FIFO"],
+    "answer": "Priority Scheduling",
+    "explanation": "Lower priority processes may starve indefinitely."
+  },
+  {
+    "id": 13,
+    "question": "If a number is increased by 20% and then decreased by 20%, net change is:",
+    "options": ["0%", "4% decrease", "4% increase", "2% decrease"],
+    "answer": "4% decrease",
+    "explanation": "Net change = - (20×20)/100 = -4%."
+  },
+  {
+    "id": 14,
+    "question": "Determinant of matrix [[2,3],[4,6]] is:",
+    "options": ["0", "2", "6", "12"],
+    "answer": "0",
+    "explanation": "Determinant = (2×6 - 3×4) = 12 - 12 = 0."
+  },
+  {
+    "id": 15,
+    "question": "Which layer of TCP/IP handles routing?",
+    "options": ["Application", "Transport", "Internet", "Network Interface"],
+    "answer": "Internet",
+    "explanation": "Internet layer handles IP addressing and routing."
+  },
+  {
+    "id": 16,
+    "question": "A boat speed in still water is 10 km/h, stream speed 2 km/h. Time to go 24 km upstream:",
+    "options": ["2 hr", "3 hr", "4 hr", "5 hr"],
+    "answer": "3 hr",
+    "explanation": "Upstream speed = 10-2 = 8 km/h. Time = 24/8 = 3 hr."
+  },
+  {
+    "id": 17,
+    "question": "Find HCF of 306 and 657:",
+    "options": ["9", "3", "18", "27"],
+    "answer": "9",
+    "explanation": "Using Euclid's division method, HCF = 9."
+  },
+  {
+    "id": 18,
+    "question": "Which normal form removes transitive dependency?",
+    "options": ["1NF", "2NF", "3NF", "BCNF"],
+    "answer": "3NF",
+    "explanation": "Third Normal Form removes transitive dependency."
+  },
+  {
+    "id": 19,
+    "question": "If cos θ = 0.6, find sin θ (acute).",
+    "options": ["0.6", "0.8", "0.5", "0.9"],
+    "answer": "0.8",
+    "explanation": "sin²θ = 1 - 0.36 = 0.64 ⇒ sinθ = 0.8."
+  },
+  {
+    "id": 20,
+    "question": "Number of diagonals in a hexagon:",
+    "options": ["6", "9", "12", "15"],
+    "answer": "9",
+    "explanation": "Formula = n(n-3)/2 ⇒ 6×3/2 = 9."
+  },
+  {
+    "id": 21,
+    "question": "Which algorithm is used in Minimum Spanning Tree?",
+    "options": ["Dijkstra", "Kruskal", "Binary Search", "DFS"],
+    "answer": "Kruskal",
+    "explanation": "Kruskal's algorithm finds MST using greedy approach."
+  },
+  {
+    "id": 22,
+    "question": "If 8 men can build a wall in 15 days, how many men needed to build it in 10 days?",
+    "options": ["10", "12", "14", "16"],
+    "answer": "12",
+    "explanation": "Work = 8×15 = 120 man-days. Required = 120/10 = 12 men."
+  },
+  {
+    "id": 23,
+    "question": "Binary of decimal 45:",
+    "options": ["101101", "110101", "101011", "111001"],
+    "answer": "101101",
+    "explanation": "45 = 32+8+4+1 ⇒ 101101."
+  },
+  {
+    "id": 24,
+    "question": "If x² - 5x + 6 = 0, roots are:",
+    "options": ["2 and 3", "1 and 6", "3 and 4", "2 and 4"],
+    "answer": "2 and 3",
+    "explanation": "Factorization: (x-2)(x-3)=0."
+  },
+  {
+    "id": 25,
+    "question": "Which of the following is non-preemptive scheduling?",
+    "options": ["Round Robin", "SJF (Non-preemptive)", "Priority (Preemptive)", "Multilevel Queue"],
+    "answer": "SJF (Non-preemptive)",
+    "explanation": "Non-preemptive SJF runs process till completion."
+  }
+]

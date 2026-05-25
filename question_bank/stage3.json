@@ -1,0 +1,177 @@
+[
+  {
+    "id": 1,
+    "question": "If the compound interest on ₹5000 for 2 years at 10% per annum is calculated annually, what is the interest?",
+    "options": ["₹1000", "₹1050", "₹1100", "₹1200"],
+    "answer": "₹1050",
+    "explanation": "Amount = 5000(1.1)^2 = 5000 × 1.21 = 6050. CI = 6050 - 5000 = 1050."
+  },
+  {
+    "id": 2,
+    "question": "Find the next number: 1, 4, 10, 22, 46, ?",
+    "options": ["70", "82", "94", "118"],
+    "answer": "94",
+    "explanation": "Pattern: Multiply by 2 and add 2. 46×2+2 = 94."
+  },
+  {
+    "id": 3,
+    "question": "If 12 men complete a work in 15 days, how many men are required to complete it in 9 days?",
+    "options": ["18", "20", "22", "24"],
+    "answer": "20",
+    "explanation": "Total work = 12×15 = 180 man-days. Required men = 180/9 = 20."
+  },
+  {
+    "id": 4,
+    "question": "The probability of getting a number divisible by 3 when rolling a die is:",
+    "options": ["1/6", "1/3", "1/2", "2/3"],
+    "answer": "1/3",
+    "explanation": "Numbers divisible by 3 are 3 and 6 → 2 outcomes out of 6 → 2/6 = 1/3."
+  },
+  {
+    "id": 5,
+    "question": "Which data structure is used in Depth First Search?",
+    "options": ["Queue", "Stack", "Heap", "Graph"],
+    "answer": "Stack",
+    "explanation": "DFS uses stack (LIFO principle)."
+  },
+  {
+    "id": 6,
+    "question": "Find the value of x: 2x² - 8x = 0.",
+    "options": ["0,4", "2,4", "0,2", "4,6"],
+    "answer": "0,4",
+    "explanation": "2x(x - 4) = 0 ⇒ x = 0 or x = 4."
+  },
+  {
+    "id": 7,
+    "question": "LCM of 18 and 24 is:",
+    "options": ["48", "54", "72", "36"],
+    "answer": "72",
+    "explanation": "Prime factorization gives LCM = 72."
+  },
+  {
+    "id": 8,
+    "question": "If sin θ = 1/2 and θ is acute, then θ equals:",
+    "options": ["30°", "45°", "60°", "90°"],
+    "answer": "30°",
+    "explanation": "sin 30° = 1/2."
+  },
+  {
+    "id": 9,
+    "question": "Time complexity of Merge Sort:",
+    "options": ["O(n²)", "O(n)", "O(log n)", "O(n log n)"],
+    "answer": "O(n log n)",
+    "explanation": "Merge sort uses divide and conquer with log n levels and n work per level."
+  },
+  {
+    "id": 10,
+    "question": "If a number is decreased by 10% and then increased by 10%, net change is:",
+    "options": ["0%", "1% decrease", "1% increase", "2% decrease"],
+    "answer": "1% decrease",
+    "explanation": "Net change = - (10×10)/100 = -1%."
+  },
+  {
+    "id": 11,
+    "question": "Number of diagonals in a heptagon:",
+    "options": ["14", "21", "28", "35"],
+    "answer": "14",
+    "explanation": "Formula: n(n-3)/2 = 7×4/2 = 14."
+  },
+  {
+    "id": 12,
+    "question": "Which protocol is used for secure file transfer?",
+    "options": ["FTP", "HTTP", "SFTP", "SMTP"],
+    "answer": "SFTP",
+    "explanation": "SFTP encrypts file transfer using SSH."
+  },
+  {
+    "id": 13,
+    "question": "Find missing number: 2, 5, 11, 23, 47, ?",
+    "options": ["91", "95", "99", "101"],
+    "answer": "95",
+    "explanation": "Pattern: Multiply by 2 and add 1. 47×2+1 = 95."
+  },
+  {
+    "id": 14,
+    "question": "If cos θ = 0.8, find sin θ (acute angle).",
+    "options": ["0.6", "0.8", "0.5", "0.7"],
+    "answer": "0.6",
+    "explanation": "sin²θ = 1 - 0.64 = 0.36 ⇒ sinθ = 0.6."
+  },
+  {
+    "id": 15,
+    "question": "Which normal form eliminates partial dependency?",
+    "options": ["1NF", "2NF", "3NF", "BCNF"],
+    "answer": "2NF",
+    "explanation": "Second Normal Form removes partial dependency."
+  },
+  {
+    "id": 16,
+    "question": "If 3 pencils cost ₹45, what is the cost of 8 pencils?",
+    "options": ["₹100", "₹110", "₹120", "₹130"],
+    "answer": "₹120",
+    "explanation": "Cost per pencil = 45/3 = 15. For 8 pencils = 8×15 = 120."
+  },
+  {
+    "id": 17,
+    "question": "Binary of decimal 25:",
+    "options": ["11001", "10101", "11100", "10011"],
+    "answer": "11001",
+    "explanation": "25 = 16+8+1 ⇒ 11001."
+  },
+  {
+    "id": 18,
+    "question": "Find HCF of 252 and 105:",
+    "options": ["21", "42", "63", "35"],
+    "answer": "21",
+    "explanation": "Using Euclid method, HCF = 21."
+  },
+  {
+    "id": 19,
+    "question": "Which scheduling algorithm gives minimum average waiting time?",
+    "options": ["FCFS", "Round Robin", "SJF", "Priority"],
+    "answer": "SJF",
+    "explanation": "Shortest Job First minimizes average waiting time."
+  },
+  {
+    "id": 20,
+    "question": "If log10(2) = 0.3010, find log10(16).",
+    "options": ["1.2040", "1.0000", "0.9030", "1.5050"],
+    "answer": "1.2040",
+    "explanation": "16 = 2^4 ⇒ log 16 = 4×0.3010 = 1.2040."
+  },
+  {
+    "id": 21,
+    "question": "Find roots of x² - 9 = 0.",
+    "options": ["±3", "3", "±9", "0,9"],
+    "answer": "±3",
+    "explanation": "x² = 9 ⇒ x = ±3."
+  },
+  {
+    "id": 22,
+    "question": "Which layer in OSI handles routing?",
+    "options": ["Transport", "Network", "Session", "Data Link"],
+    "answer": "Network",
+    "explanation": "Network layer manages logical addressing and routing."
+  },
+  {
+    "id": 23,
+    "question": "If 8% of x is 64, find x.",
+    "options": ["700", "750", "800", "850"],
+    "answer": "800",
+    "explanation": "0.08x = 64 ⇒ x = 64/0.08 = 800."
+  },
+  {
+    "id": 24,
+    "question": "The square root of 0.0004 is:",
+    "options": ["0.02", "0.2", "0.002", "2"],
+    "answer": "0.02",
+    "explanation": "√0.0004 = √(4×10^-4) = 2×10^-2 = 0.02."
+  },
+  {
+    "id": 25,
+    "question": "Which algorithm is used to find shortest path in weighted graph?",
+    "options": ["DFS", "BFS", "Dijkstra", "Kruskal"],
+    "answer": "Dijkstra",
+    "explanation": "Dijkstra’s algorithm finds shortest path in weighted graphs."
+  }
+]

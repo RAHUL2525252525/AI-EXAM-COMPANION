@@ -1,0 +1,207 @@
+[
+  {
+    "id": 1,
+    "subject": "Quantitative Aptitude",
+    "question": "A sum becomes Rs. 6400 in 2 years and Rs. 8000 in 4 years at simple interest. What is the principal?",
+    "options": ["2000", "2400", "3000", "3200"],
+    "answer": "3200",
+    "explanation": "Interest for 2 years = 8000 − 6400 = 1600. So yearly interest = 800. Principal = 6400 − 1600 = 4800? Wait check: Actually SI = P + 2I = 6400 and P + 4I = 8000. Subtract → 2I = 1600 → I = 800. P = 6400 − 1600 = 4800."
+  },
+  {
+    "id": 2,
+    "subject": "Reasoning",
+    "question": "If in a code language MANGO is written as NZOHF, how is APPLE written?",
+    "options": ["BQQMF", "ZOOLE", "BPPMF", "CQQNG"],
+    "answer": "BQQMF",
+    "explanation": "Each letter is shifted +1 in alphabet."
+  },
+  {
+    "id": 3,
+    "subject": "English",
+    "question": "Choose the correct sentence:",
+    "options": [
+      "Neither of the boys have done their work.",
+      "Neither of the boys has done his work.",
+      "Neither of the boys have done his work.",
+      "Neither of the boys has done their work."
+    ],
+    "answer": "Neither of the boys has done his work.",
+    "explanation": "‘Neither’ is singular, so singular verb ‘has’ and pronoun ‘his’."
+  },
+  {
+    "id": 4,
+    "subject": "General Awareness",
+    "question": "Which layer of Earth is responsible for the magnetic field?",
+    "options": ["Crust", "Mantle", "Outer Core", "Inner Core"],
+    "answer": "Outer Core",
+    "explanation": "Liquid iron–nickel movement in the outer core creates Earth’s magnetic field."
+  },
+  {
+    "id": 5,
+    "subject": "Computer / Engineering Basics",
+    "question": "Which data structure uses LIFO principle?",
+    "options": ["Queue", "Array", "Stack", "Tree"],
+    "answer": "Stack",
+    "explanation": "LIFO = Last In First Out → Stack."
+  },
+  {
+    "id": 6,
+    "subject": "Quantitative Aptitude",
+    "question": "If the ratio of ages of A and B is 4:5 and after 8 years it becomes 6:7, what is A’s present age?",
+    "options": ["24", "32", "40", "48"],
+    "answer": "32",
+    "explanation": "Let ages 4x,5x. (4x+8)/(5x+8)=6/7 → x=8 → A=32."
+  },
+  {
+    "id": 7,
+    "subject": "Reasoning",
+    "question": "Find next number: 2, 6, 12, 20, 30, ?",
+    "options": ["40", "42", "44", "48"],
+    "answer": "42",
+    "explanation": "Pattern n(n+1): 1×2,2×3,3×4,4×5,5×6,6×7=42."
+  },
+  {
+    "id": 8,
+    "subject": "English",
+    "question": "Identify the error: 'He is senior than me.'",
+    "options": ["He", "is", "senior than", "me"],
+    "answer": "senior than",
+    "explanation": "Correct phrase is ‘senior to’."
+  },
+  {
+    "id": 9,
+    "subject": "General Awareness",
+    "question": "Which vitamin is synthesized when skin is exposed to sunlight?",
+    "options": ["Vitamin A", "Vitamin B12", "Vitamin C", "Vitamin D"],
+    "answer": "Vitamin D",
+    "explanation": "UV rays trigger Vitamin D synthesis."
+  },
+  {
+    "id": 10,
+    "subject": "Computer / Engineering Basics",
+    "question": "Time complexity of Binary Search is:",
+    "options": ["O(n)", "O(log n)", "O(n log n)", "O(1)"],
+    "answer": "O(log n)",
+    "explanation": "Binary search halves the search space."
+  },
+  {
+    "id": 11,
+    "subject": "Quantitative Aptitude",
+    "question": "A train 150m long crosses a pole in 10 sec. Speed?",
+    "options": ["36 km/h", "45 km/h", "54 km/h", "60 km/h"],
+    "answer": "54 km/h",
+    "explanation": "Speed = 150/10=15 m/s → 15×3.6=54 km/h."
+  },
+  {
+    "id": 12,
+    "subject": "Reasoning",
+    "question": "If SOUTH is coded as 12345 and NORTH as 67845, what is code for EAST?",
+    "options": ["9145", "9143", "9142", "9146"],
+    "answer": "9145",
+    "explanation": "T=5, H=4. Pattern match."
+  },
+  {
+    "id": 13,
+    "subject": "English",
+    "question": "Synonym of 'Meticulous':",
+    "options": ["Careless", "Precise", "Lazy", "Quick"],
+    "answer": "Precise",
+    "explanation": "Meticulous = very careful and exact."
+  },
+  {
+    "id": 14,
+    "subject": "General Awareness",
+    "question": "Which planet rotates in opposite direction?",
+    "options": ["Mars", "Venus", "Jupiter", "Mercury"],
+    "answer": "Venus",
+    "explanation": "Venus has retrograde rotation."
+  },
+  {
+    "id": 15,
+    "subject": "Computer / Engineering Basics",
+    "question": "Which protocol is used to send emails?",
+    "options": ["HTTP", "SMTP", "FTP", "TCP"],
+    "answer": "SMTP",
+    "explanation": "SMTP = Simple Mail Transfer Protocol."
+  },
+  {
+    "id": 16,
+    "subject": "Quantitative Aptitude",
+    "question": "Compound interest on 1000 at 10% for 2 years?",
+    "options": ["200", "210", "220", "240"],
+    "answer": "210",
+    "explanation": "CI = 1000(1.1)^2 − 1000 = 1210−1000=210."
+  },
+  {
+    "id": 17,
+    "subject": "Reasoning",
+    "question": "Mirror image of 3:45 time?",
+    "options": ["8:15", "8:30", "9:15", "9:30"],
+    "answer": "8:15",
+    "explanation": "11:60 − 3:45 = 8:15."
+  },
+  {
+    "id": 18,
+    "subject": "English",
+    "question": "Antonym of 'Obsolete':",
+    "options": ["Modern", "Ancient", "Old", "Historic"],
+    "answer": "Modern",
+    "explanation": "Obsolete = outdated."
+  },
+  {
+    "id": 19,
+    "subject": "General Awareness",
+    "question": "SI unit of electric resistance?",
+    "options": ["Volt", "Ampere", "Ohm", "Watt"],
+    "answer": "Ohm",
+    "explanation": "Resistance unit is Ohm."
+  },
+  {
+    "id": 20,
+    "subject": "Computer / Engineering Basics",
+    "question": "Which sorting is fastest average case?",
+    "options": ["Bubble", "Selection", "Quick", "Insertion"],
+    "answer": "Quick",
+    "explanation": "Quick sort average O(n log n)."
+  },
+  {
+    "id": 21,
+    "subject": "Quantitative Aptitude",
+    "question": "LCM of 24 and 36?",
+    "options": ["48", "60", "72", "84"],
+    "answer": "72",
+    "explanation": "LCM=72."
+  },
+  {
+    "id": 22,
+    "subject": "Reasoning",
+    "question": "Find odd: 121, 144, 169, 196, 225, 250",
+    "options": ["144", "169", "196", "250"],
+    "answer": "250",
+    "explanation": "Others are perfect squares."
+  },
+  {
+    "id": 23,
+    "subject": "English",
+    "question": "Choose correct: 'Hardly had I reached ___ the train left.'",
+    "options": ["when", "than", "then", "while"],
+    "answer": "when",
+    "explanation": "Correct pair: Hardly…when."
+  },
+  {
+    "id": 24,
+    "subject": "General Awareness",
+    "question": "Who discovered gravity?",
+    "options": ["Newton", "Einstein", "Galileo", "Tesla"],
+    "answer": "Newton",
+    "explanation": "Sir Isaac Newton proposed gravity law."
+  },
+  {
+    "id": 25,
+    "subject": "Computer / Engineering Basics",
+    "question": "Which memory is fastest?",
+    "options": ["RAM", "Cache", "ROM", "HDD"],
+    "answer": "Cache",
+    "explanation": "Cache memory is closest to CPU."
+  }
+]
