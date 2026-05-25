@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gemini Advanced | Neural Expressive Workspace</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    /* ── GEMINI OFFICIAL SPECTRUM ── */
+    --gemini-blue: #4285f4;
+    --gemini-purple: #9b72cb;
+    --gemini-pink: #d96570;
+    --gemini-live-green: #34a853;
+    
+    /* ── GOOGLE OBSIDIAN DEEP LAYOUT ── */
+    --bg-main: #0b0b0d;         
+    --bg-surface: #131314;      
+    --bg-card: #1e1f20;         
+    
+    /* ── TEXT & BORDERS ── */
+    --text-primary: #e3e3e3;
+    --text-secondary: #c4c7c5;
+    --text-muted: #8e918f;
+    --border-subtle: #2d2f31;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+}
+
+/* ── SIDEBAR SYSTEM ── */
+.sidebar {
+    width: 260px;
+    background-color: var(--bg-surface);
+    border-right: 1px solid var(--border-subtle);
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 10;
+    flex-shrink: 0;
+}
+
+.brand-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+}
+
+.gemini-star {
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(135deg, var(--gemini-blue), var(--gemini-purple), var(--gemini-pink));
+    clip-path: polygon(50% 0%, 63% 37%, 100% 50%, 63% 63%, 50% 100%, 37% 63%, 0% 50%, 37% 37%);
+    animation: gentleRotate 8s infinite linear;
+}
+
+@keyframes gentleRotate {
+    0% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.05) rotate(180deg); }
+    100% { transform: scale(1) rotate(360deg); }
+}
+
+.brand-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: -0.3px;
+    color: var(--text-primary);
+}
+
+.nav-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 32px;
+    flex-grow: 1;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 100px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.nav-item:hover {
+    background-color: rgba(255, 255, 255, 0.04);
+    color: var(--text-primary);
+}
+
+.nav-item.active {
+    background-color: rgba(155, 114, 193, 0.12);
+    color: #d3bbff;
+}
+
+.logout-btn {
+    padding: 12px 16px;
+    color: #f28b82;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border-radius: 100px;
+    transition: background 0.2s;
+    text-align: center;
+    border: 1px solid rgba(242, 139, 130, 0.2);
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    background-color: rgba(242, 139, 130, 0.08);
+}
+
+/* ── MAIN CONTAINER LAYOUT ── */
+.workspace-container {
+    flex-grow: 1;
+    padding: 40px 56px;
+    overflow-y: auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.workspace-header {
+    margin-bottom: 36px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.workspace-header h1 {
+    font-size: 2.8rem;
+    font-weight: 400;
+    letter-spacing: -0.8px;
+    line-height: 1.2;
+    background: linear-gradient(90deg, #ffffff, #a8b1ff, #e2b6ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.workspace-header p {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-top: 8px;
+}
+
+/* ── DYNAMIC GENERATIVE FIELD ── */
+.ai-stream-panel {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 24px;
+    padding: 32px;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+.ai-stream-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gemini-blue), var(--gemini-purple), var(--gemini-pink));
+    opacity: 0.7;
+}
+
+.stream-title {
+    font-size: 0.8rem;
+    color: #9b72cb;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stream-output {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+    font-weight: 300;
+    min-height: 52px;
+}
+
+/* ── SYSTEM MATRIX SECTION GRID ── */
+.content-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+    margin-bottom: 32px;
+}
+
+.workspace-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 24px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.workspace-card:hover {
+    border-color: rgba(155, 114, 193, 0.25);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.card-heading {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    letter-spacing: 0.8px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Core Checkbox Rows */
+.task-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+.task-row:last-child { border-bottom: none; }
+
+.task-row input[type="checkbox"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-subtle);
+    border-radius: 6px;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s;
+}
+
+.task-row input[type="checkbox"]:checked {
+    background-color: var(--gemini-blue);
+    border-color: var(--gemini-blue);
+    box-shadow: 0 0 8px rgba(66, 133, 244, 0.4);
+}
+
+.task-row input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    color: white;
+    font-size: 0.8rem;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.task-text { 
+    font-size: 0.95rem; 
+    color: var(--text-primary); 
+    transition: color 0.2s;
+}
+
+.task-row input[type="checkbox"]:checked ~ .task-text {
+    color: var(--text-muted);
+    text-decoration: line-through rgba(255, 255, 255, 0.15);
+}
+
+/* ── FEATURE 1: PROGRESS TRACKER UNIQUE MODULES ── */
+.analytics-metrics {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    font-family: 'Space Grotesk', sans-serif;
+    gap: 12px;
+}
+
+.metric-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.metric-lbl {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+}
+
+.metric-val {
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+#progressPercentage {
+    background: linear-gradient(135deg, #a8b1ff, #e2b6ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 600;
+}
+
+.progress-track-wrapper {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 100px;
+    height: 10px;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+    margin-top: auto;
+}
+
+.progress-track-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--gemini-blue), var(--gemini-purple), var(--gemini-pink));
+    border-radius: 100px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── FEATURE 4: QUICK NOTES UNIQUE MODULES ── */
+.notes-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 12px;
+}
+
+.notes-textarea {
+    width: 100%;
+    min-height: 140px;
+    flex-grow: 1;
+    background-color: rgba(255, 255, 255, 0.01);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    padding: 16px;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    resize: none;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.notes-textarea:focus {
+    border-color: var(--gemini-purple);
+    box-shadow: 0 0 16px rgba(155, 114, 203, 0.15);
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+.notes-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.save-status {
+    font-family: 'JetBrains Mono', monospace;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.3s;
+}
+
+.save-status.saving { color: var(--gemini-pink); }
+.save-status.saved { color: var(--gemini-live-green); }
+
+/* ── RESPONSIVE ADAPTATIONS & MOBILE NAVIGATION SYSTEM ── */
+@media(max-width: 1050px) {
+    body {
+        flex-direction: column;
+        overflow-x: hidden;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        padding: 16px 24px;
+        border-right: none;
+        border-bottom: 1px solid var(--border-subtle);
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .nav-group {
+        flex-direction: row;
+        margin-top: 0;
+        gap: 8px;
+        flex-grow: 0;
+        overflow-x: auto;
+        padding-bottom: 4px;
+        /* Hide scrollbars */
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    
+    .nav-group::-webkit-scrollbar {
+        display: none;
+    }
+
+    .nav-item {
+        padding: 8px 16px;
+        white-space: nowrap;
+        font-size: 0.85rem;
+    }
+
+    .logout-btn {
+        display: none; /* Consolidated cleanly for mobile stream header space */
+    }
+
+    .workspace-container {
+        padding: 24px;
+    }
+
+    .content-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+}
+
+@media(max-width: 680px) {
+    .sidebar {
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+        padding: 16px;
+    }
+
+    .nav-group {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .workspace-container {
+        padding: 16px;
+    }
+
+    .workspace-header h1 {
+        font-size: 2.2rem;
+    }
+
+    .ai-stream-panel {
+        padding: 20px;
+    }
+
+    .stream-output {
+        font-size: 1rem;
+    }
+}
+</style>
+</head>
+<body>
+
+    <!-- Structural Adaptive Sidebar Components -->
+    <nav class="sidebar">
+        <div class="top-structure" style="display: flex; flex-direction: inherit; gap: inherit; align-items: inherit; width: 100%;">
+            <div class="brand-wrapper">
+                <div class="gemini-star"></div>
+                <div class="brand-title">AI COMPANION</div>
+            </div>
+            
+            <div class="nav-group">
+                <a href="#" class="nav-item active">🏠 Dashboard</a>
+                <a href="/mocktest" class="nav-item">⚔ Mock test</a>
+                <a href="/mentor" class="nav-item">🤖 AI chatbot</a>
+                <a href="/performance" class="nav-item">📊 Performance data</a>
+            </div>
+        </div>
+
+        <div onclick="logoutUser()" class="logout-btn">Logout</div>
+    </nav>
+
+    <!-- Main Adaptive Workspace Layout Container -->
+    <main class="workspace-container">
+        
+        <header class="workspace-header">
+            <div>
+                <h1 id="greeting">Hello, Learner</h1>
+                <p id="systemPulse">System Status: Active</p>
+            </div>
+        </header>
+
+        <!-- Dynamic Generative Prompt Outputs Frame -->
+        <section class="ai-stream-panel">
+            <div class="stream-title">
+                <span class="gemini-star" style="width:12px; height:12px; animation-duration:4s;"></span>
+                Contextual Strategy Directive
+            </div>
+            <div class="stream-output" id="aiInsight"></div>
+        </section>
+
+        <!-- Primary Layout Module Data Grid -->
+        <section class="content-grid">
+            
+            <!-- Core Target Objectives Matrix Card -->
+            <div class="workspace-card">
+                <div class="card-heading">
+                    <span style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--gemini-pink);"></span>
+                    Target Objectives
+                </div>
+                
+                <div class="task-row">
+                    <input type="checkbox" class="goal" id="g1">
+                    <span class="task-text">Complete 2 comprehensive mock tests</span>
+                </div>
+                <div class="task-row">
+                    <input type="checkbox" class="goal" id="g2">
+                    <span class="task-text">Review memory layouts & Java Collections package</span>
+                </div>
+                <div class="task-row">
+                    <input type="checkbox" class="goal" id="g3">
+                    <span class="task-text">Initiate 1 hour structural content revision</span>
+                </div>
+            </div>
+
+            <!-- FEATURE 1: REAL STUDY PROGRESS TRACKER -->
+            <div class="workspace-card">
+                <div class="card-heading">
+                    <span style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--gemini-blue);"></span>
+                    Daily Progress Analytics
+                </div>
+                <div class="analytics-metrics">
+                    <div class="metric-item">
+                        <span class="metric-lbl">Total Work</span>
+                        <span class="metric-val" id="totalTasks">3</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-lbl">Completed</span>
+                        <span class="metric-val" id="completedTasks">0</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-lbl">Efficiency Rate</span>
+                        <span class="metric-val" id="progressPercentage">0%</span>
+                    </div>
+                </div>
+                <div class="progress-track-wrapper">
+                    <div class="progress-track-fill" id="progressBar"></div>
+                </div>
+            </div>
+
+            <!-- FEATURE 4: STICKY NOTES / QUICK NOTES -->
+            <div class="workspace-card" style="grid-column: span 1;">
+                <div class="card-heading">
+                    <span style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--gemini-purple);"></span>
+                    Quick Notes
+                </div>
+                <div class="notes-container">
+                    <textarea class="notes-textarea" id="quickNotesInput" placeholder="Capture active ideas, architecture drafts, or code structures..."></textarea>
+                    <div class="notes-footer">
+                        <span class="save-status" id="saveStatus">Saved</span>
+                        <span class="char-count" id="charCounter">0 characters</span>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+<script>
+function logoutUser() {
+    window.location.href = "/logout";
+}
+
+// ── STATE VARIABLES & CONFIGS ──
+let typewriterTimer = null;
+let saveDebounceTimeout = null;
+let currentLoadedCount = -1; 
+
+// Structured recommendations map linked to completion numbers
+const recommendationsMap = {
+    0: "Analysis complete. Focus structural energy on Computer Networks and routing structures today. Recent diagnostic metrics indicate sub-optimal retention rates within complex data protocols.",
+    1: "Dynamic change processed. Initial momentum registered. Prioritize the review of your Database Management System (DBMS) architecture blocks before attempting deep-level simulation models.",
+    2: "Excellent progress matrix observed. Memory nodes show high optimization levels. Proceed directly with deep validation patterns across your advanced Java Utility layouts.",
+    3: "Complete architectural integration reached. All targeted daily benchmarks have been parsed cleanly. Ready for complex system deployments or active runtime optimizations."
+};
+
+// ── UNIQUE LOGIC 5: EXTENDED TYPEWRITER ENGINE ──
+function triggerAIInsightUpdate(completedCount) {
+    const outputElement = document.getElementById("aiInsight");
+    if (!outputElement) return;
+    
+    const rawTargetText = recommendationsMap[completedCount] || recommendationsMap[0];
+    
+    if (typewriterTimer) {
+        clearInterval(typewriterTimer);
+    }
+    
+    outputElement.textContent = "";
+    let localIndex = 0;
+    
+    typewriterTimer = setInterval(() => {
+        if (localIndex < rawTargetText.length) {
+            outputElement.textContent += rawTargetText.charAt(localIndex);
+            localIndex++;
+        } else {
+            clearInterval(typewriterTimer);
+            typewriterTimer = null;
+        }
+    }, 20);
+}
+
+// ── UNIQUE LOGIC 1: TRACKER ENGINE ──
+function recalculateDashboardState() {
+    const checkboxes = document.querySelectorAll(".goal");
+    const total = checkboxes.length;
+    let completed = 0;
+    
+    checkboxes.forEach((box) => {
+        if (box.checked) completed++;
+    });
+    
+    const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+    
+    // UI assignments for Metrics Engine
+    document.getElementById("totalTasks").textContent = total;
+    document.getElementById("completedTasks").textContent = completed;
+    document.getElementById("progressPercentage").textContent = `${percentage}%`;
+    document.getElementById("progressBar").style.width = `${percentage}%`;
+    
+    // Check if configuration counts changed to safely trigger typewriter engine
+    if (currentLoadedCount !== completed) {
+        currentLoadedCount = completed;
+        triggerAIInsightUpdate(completed);
+    }
+}
+
+// ── UNIQUE LOGIC 4: STICKY NOTES ENGINE WITH STORAGE ──
+function initializeNotesEngine() {
+    const textSpace = document.getElementById("quickNotesInput");
+    const counter = document.getElementById("charCounter");
+    const indicator = document.getElementById("saveStatus");
+    
+    if (!textSpace) return;
+    
+    const preservedNotes = localStorage.getItem("workspace_quick_notes") || "";
+    textSpace.value = preservedNotes;
+    counter.textContent = `${preservedNotes.length} character${preservedNotes.length === 1 ? '' : 's'}`;
+    
+    textSpace.addEventListener("input", (e) => {
+        const length = e.target.value.length;
+        counter.textContent = `${length} character${length === 1 ? '' : 's'}`;
+        
+        indicator.textContent = "Saving...";
+        indicator.className = "save-status saving";
+        
+        clearTimeout(saveDebounceTimeout);
+        saveDebounceTimeout = setTimeout(() => {
+            localStorage.setItem("workspace_quick_notes", e.target.value);
+            indicator.textContent = "Saved";
+            indicator.className = "save-status saved";
+        }, 600);
+    });
+}
+
+// ── DOM SYSTEM INITIALIZATION ──
+window.addEventListener("DOMContentLoaded", () => {
+    // Phase 1: Initialize persistent input configurations
+    document.querySelectorAll(".goal").forEach((box) => {
+        box.checked = localStorage.getItem(box.id) === "true";
+        
+        box.onchange = () => {
+            localStorage.setItem(box.id, box.checked);
+            recalculateDashboardState();
+        };
+    });
+    
+    // Phase 2: Instantiate structural layout features
+    initializeNotesEngine();
+    recalculateDashboardState();
+});
+</script>
+</body>
+</html>
