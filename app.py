@@ -9,12 +9,16 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import firebase_admin
 from firebase_admin import credentials, auth as firebase_auth
 
+# ================= BCRYPT =================
+import bcrypt
+
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "fallback_secret")
 
 # 🔥 SESSION FIX
 app.config['SESSION_COOKIE_SAMESITE'] = "Lax"
-app.config['SESSION_COOKIE_SECURE'] = False
+# FIX: Set True in production (HTTPS). Set False only for local dev via env var.
+app.config['SESSION_COOKIE_SECURE'] = os.environ.get("DEV_MODE", "false").lower() != "true"
 
 # ================= GROQ CONFIG =================
 
@@ -112,17 +116,35 @@ def get_ai_response(user_message):
 
 # --------------------------------------------------
 # FIREBASE INIT
+# FIX: Load firebase key from env var (JSON string) first,
+#      fall back to firebase_key.json for local dev.
 # --------------------------------------------------
 
 if not firebase_admin._apps:
 
-    firebase_key_path = "firebase_key.json"
+    firebase_key_env = os.environ.get("FIREBASE_KEY_JSON")
 
-    if not os.path.exists(firebase_key_path):
-        print("firebase_key.json not found")
+    if firebase_key_env:
+        # Production: key loaded from environment variable
+        try:
+            key_dict = json.loads(firebase_key_env)
+            cred = credentials.Certificate(key_dict)
+            firebase_admin.initialize_app(cred)
+            print("Firebase initialized from environment variable.")
+        except Exception as e:
+            print(f"Firebase env init error: {e}")
+
+    elif os.path.exists("firebase_key.json"):
+        # Local dev fallback: key loaded from file
+        try:
+            cred = credentials.Certificate("firebase_key.json")
+            firebase_admin.initialize_app(cred)
+            print("Firebase initialized from firebase_key.json (local dev).")
+        except Exception as e:
+            print(f"Firebase file init error: {e}")
+
     else:
-        cred = credentials.Certificate(firebase_key_path)
-        firebase_admin.initialize_app(cred)
+        print("Firebase: No key found. Set FIREBASE_KEY_JSON env var.")
 
 # --------------------------------------------------
 BASE_DIR = os.getcwd()
@@ -173,6 +195,38 @@ if not os.path.exists(RESULTS_FILE):
         json.dump(initial_structure, f, indent=2)
 
 # --------------------------------------------------
+# PASSWORD HELPERS
+# FIX: Passwords are now hashed with bcrypt.
+#      is_plain_password() handles existing plain-text
+#      passwords already stored, migrating them on next login.
+# --------------------------------------------------
+
+def hash_password(plain: str) -> str:
+    return bcrypt.hashpw(plain.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+
+
+def verify_password(plain: str, stored: str) -> bool:
+    # Handles both bcrypt hashes and legacy plain-text passwords
+    # so existing users aren't locked out
+    try:
+        return bcrypt.checkpw(plain.encode("utf-8"), stored.encode("utf-8"))
+    except Exception:
+        # Legacy plain-text fallback
+        return plain == stored
+
+
+def migrate_password_if_needed(users: list, username: str, plain: str) -> list:
+    """If user still has a plain-text password, hash it and save."""
+    for u in users:
+        if u["username"] == username:
+            stored = u["password"]
+            is_bcrypt = stored.startswith("$2b$") or stored.startswith("$2a$")
+            if not is_bcrypt:
+                u["password"] = hash_password(plain)
+            break
+    return users
+
+# --------------------------------------------------
 # FIREBASE LOGIN
 # --------------------------------------------------
 
@@ -190,7 +244,6 @@ def firebase_login():
 
         token = data["token"]
 
-        # ✅ FIXED LINE
         decoded_token = firebase_auth.verify_id_token(token)
 
         email = decoded_token.get("email")
@@ -249,15 +302,18 @@ def login():
             users = json.load(f)
 
         user = next(
-            (
-                u for u in users
-                if u["username"] == username
-                and u["password"] == password
-            ),
+            (u for u in users if u["username"] == username),
             None
         )
 
-        if user:
+        # FIX: Use bcrypt verify instead of plain == plain
+        if user and verify_password(password, user["password"]):
+
+            # FIX: Silently migrate legacy plain-text passwords on login
+            users = migrate_password_if_needed(users, username, password)
+            with open(USERS_FILE, "w", encoding="utf-8") as f:
+                json.dump(users, f, indent=2)
+
             session["user"] = username
             return redirect("/")
 
@@ -328,9 +384,10 @@ def register():
                 error="Username already exists"
             )
 
+        # FIX: Store hashed password instead of plain text
         users.append({
             "username": username,
-            "password": password
+            "password": hash_password(password)
         })
 
         with open(USERS_FILE, "w", encoding="utf-8") as f:
@@ -543,14 +600,17 @@ def ask_ai():
 
 # --------------------------------------------------
 # MAIN
+# FIX: debug=False in production. Use DEV_MODE=true env var locally.
 # --------------------------------------------------
 
 if __name__ == "__main__":
 
     port = int(os.environ.get("PORT", 10000))
 
+    is_dev = os.environ.get("DEV_MODE", "false").lower() == "true"
+
     app.run(
         host="0.0.0.0",
         port=port,
-        debug=True
+        debug=is_dev
     )
