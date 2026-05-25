@@ -161,7 +161,7 @@ if not os.path.exists(RESULTS_FILE):
         json.dump(initial_structure, f, indent=2)
 
 # --------------------------------------------------
-# FIREBASE LOGIN ROUTE
+# FIREBASE LOGIN ROUTE (MODIFIED TO FIX REJECTED KEYWORD ERROR)
 # --------------------------------------------------
 @app.route("/firebase-login", methods=["POST"])
 def firebase_login():
@@ -173,7 +173,8 @@ def firebase_login():
 
         token = data["token"]
 
-        decoded_token = firebase_auth.verify_id_token(token, clock_skew_seconds=60)
+        # Removed 'clock_skew_seconds' parameter which was triggering runtime crashes
+        decoded_token = firebase_auth.verify_id_token(token)
 
         email = decoded_token.get("email")
 
