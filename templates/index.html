@@ -426,7 +426,10 @@ body {
     }
 
     .logout-btn {
-        display: none; /* Consolidated cleanly for mobile stream header space */
+        display: inline-block; /* Changed from none to show on tablets */
+        padding: 8px 16px;
+        font-size: 0.85rem;
+        white-space: nowrap;
     }
 
     .workspace-container {
@@ -447,9 +450,22 @@ body {
         padding: 16px;
     }
 
+    .top-structure {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+    }
+
     .nav-group {
         width: 100%;
         justify-content: flex-start;
+    }
+
+    .logout-btn {
+        display: block;
+        width: 100%; /* Spans full width on mobile view for easy interaction */
+        padding: 10px 16px;
     }
 
     .workspace-container {
@@ -472,9 +488,8 @@ body {
 </head>
 <body>
 
-    <!-- Structural Adaptive Sidebar Components -->
     <nav class="sidebar">
-        <div class="top-structure" style="display: flex; flex-direction: inherit; gap: inherit; align-items: inherit; width: 100%;">
+        <div class="top-structure">
             <div class="brand-wrapper">
                 <div class="gemini-star"></div>
                 <div class="brand-title">AI COMPANION</div>
@@ -491,7 +506,6 @@ body {
         <div onclick="logoutUser()" class="logout-btn">Logout</div>
     </nav>
 
-    <!-- Main Adaptive Workspace Layout Container -->
     <main class="workspace-container">
         
         <header class="workspace-header">
@@ -501,7 +515,6 @@ body {
             </div>
         </header>
 
-        <!-- Dynamic Generative Prompt Outputs Frame -->
         <section class="ai-stream-panel">
             <div class="stream-title">
                 <span class="gemini-star" style="width:12px; height:12px; animation-duration:4s;"></span>
@@ -510,10 +523,8 @@ body {
             <div class="stream-output" id="aiInsight"></div>
         </section>
 
-        <!-- Primary Layout Module Data Grid -->
         <section class="content-grid">
             
-            <!-- Core Target Objectives Matrix Card -->
             <div class="workspace-card">
                 <div class="card-heading">
                     <span style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--gemini-pink);"></span>
@@ -534,7 +545,6 @@ body {
                 </div>
             </div>
 
-            <!-- FEATURE 1: REAL STUDY PROGRESS TRACKER -->
             <div class="workspace-card">
                 <div class="card-heading">
                     <span style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--gemini-blue);"></span>
@@ -559,7 +569,6 @@ body {
                 </div>
             </div>
 
-            <!-- FEATURE 4: STICKY NOTES / QUICK NOTES -->
             <div class="workspace-card" style="grid-column: span 1;">
                 <div class="card-heading">
                     <span style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--gemini-purple);"></span>
