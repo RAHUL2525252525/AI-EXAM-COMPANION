@@ -1,0 +1,2 @@
+web: gunicorn ai-exam-compnion:app
+web: python app.py

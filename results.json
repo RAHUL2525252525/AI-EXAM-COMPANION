@@ -1,0 +1,118 @@
+{
+  "student_name": "Rahul S",
+  "total_attempts": 2,
+  "overall_performance": {
+    "total_questions": 75,
+    "total_correct": 60,
+    "total_wrong": 15,
+    "overall_accuracy": 80.0
+  },
+  "attempt_history": [
+    {
+      "stage": 0,
+      "score": 0,
+      "accuracy": 0
+    },
+    {
+      "stage": 0,
+      "score": 0,
+      "accuracy": 0
+    },
+    {
+      "stage": 0,
+      "score": 0,
+      "accuracy": 0
+    },
+    {
+      "stage": 0,
+      "score": 0,
+      "accuracy": 0
+    },
+    {
+      "stage": 10,
+      "score": 36,
+      "accuracy": 72.0
+    },
+    {
+      "stage": 1,
+      "score": 24,
+      "accuracy": 96.0
+    }
+  ],
+  "stage_summary": {
+    "stage1": {
+      "attempts": 1,
+      "best_score": 23,
+      "average_accuracy": 92.0,
+      "weak_topics": [],
+      "strong_topics": [
+        "General"
+      ]
+    },
+    "stage2": {
+      "attempts": 0,
+      "best_score": 0,
+      "average_accuracy": 0,
+      "weak_topics": [],
+      "strong_topics": []
+    },
+    "stage3": {
+      "attempts": 0,
+      "best_score": 0,
+      "average_accuracy": 0,
+      "weak_topics": [
+        "General"
+      ],
+      "strong_topics": []
+    },
+    "stage4": {
+      "attempts": 0,
+      "best_score": 0,
+      "average_accuracy": 0,
+      "weak_topics": [],
+      "strong_topics": []
+    },
+    "stage5": {
+      "attempts": 0,
+      "best_score": 0,
+      "average_accuracy": 0,
+      "weak_topics": [],
+      "strong_topics": []
+    },
+    "stage6": {
+      "attempts": 0,
+      "best_score": 0,
+      "average_accuracy": 0,
+      "weak_topics": [],
+      "strong_topics": []
+    },
+    "stage7": {
+      "attempts": 0,
+      "best_score": 0,
+      "average_accuracy": 0,
+      "weak_topics": [],
+      "strong_topics": []
+    },
+    "stage8": {
+      "attempts": 0,
+      "best_score": 0,
+      "average_accuracy": 0,
+      "weak_topics": [],
+      "strong_topics": []
+    },
+    "stage9": {
+      "attempts": 0,
+      "best_score": 0,
+      "average_accuracy": 0,
+      "weak_topics": [],
+      "strong_topics": []
+    },
+    "stage10": {
+      "attempts": 1,
+      "best_score": 36,
+      "average_accuracy": 72.0,
+      "weak_topics": [],
+      "strong_topics": []
+    }
+  }
+}
