@@ -150,13 +150,14 @@ def get_ai_response(user_message):
 
 
 # ================= FIREBASE INITIALIZATION =================
+# ================= FIREBASE INITIALIZATION =================
 if not firebase_admin._apps:
     try:
-        # Secure Firebase initialization from Render environment variable
+
         firebase_credentials = os.environ.get("FIREBASE_CREDENTIALS")
 
         if not firebase_credentials:
-            raise Exception("FIREBASE_CREDENTIALS environment variable not found.")
+            raise Exception("FIREBASE_CREDENTIALS not found in environment variables.")
 
         firebase_json = json.loads(firebase_credentials)
 
@@ -164,10 +165,11 @@ if not firebase_admin._apps:
 
         firebase_admin.initialize_app(cred)
 
-        print("[SUCCESS] Firebase Admin SDK initialized securely from environment variables.")
+        print("[SUCCESS] Firebase initialized successfully.")
 
     except Exception as fb_init_err:
-        print(f"Firebase initialization bypassed or failed: {fb_init_err}")
+
+        print(f"[FIREBASE ERROR] {fb_init_err}")
 
 
 # ── LOCAL PATH CONFIGURATIONS ────────────────────────────────────────────────
