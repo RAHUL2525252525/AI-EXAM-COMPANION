@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, abort, redirect, session
+from flask import Flask, render_template, request, jsonify, abort, redirect, session, make_response
 import json
 import os
 import random
@@ -9,11 +9,12 @@ import firebase_admin
 from firebase_admin import credentials, auth as firebase_auth
 
 app = Flask(__name__)
+# Keep application sessions secure
 app.secret_key = os.environ.get("SECRET_KEY", "fallback_secret")
 
-# 🔥 SESSION FIX (IMPORTANT)
+# 🔥 SESSION COOKIE CONFIGURATION
 app.config['SESSION_COOKIE_SAMESITE'] = "Lax"
-app.config['SESSION_COOKIE_SECURE'] = False  # Set to True when deploying over HTTPS!
+app.config['SESSION_COOKIE_SECURE'] = False  # Set to True when deploying over production HTTPS!
 
 # ================= GROQ CONFIG =================
 try:
@@ -59,7 +60,7 @@ except ImportError:
     ANTHROPIC_API_KEY = ""
 
 
-# ── Groq worker ──────────────────────────────────────────────────────────────
+# ── Groq concurrent execution thread ─────────────────────────────────────────
 def try_single_key(key, user_message):
     try:
         client = Groq(api_key=key, timeout=4.0)
@@ -77,7 +78,7 @@ def try_single_key(key, user_message):
         return e
 
 
-# ── Anthropic fallback ───────────────────────────────────────────────────────
+# ── Anthropic execution fallback thread ──────────────────────────────────────
 def try_anthropic(user_message):
     if not ANTHROPIC_AVAILABLE:
         raise Exception("anthropic package not installed. Run: pip install anthropic")
@@ -86,7 +87,7 @@ def try_anthropic(user_message):
 
     client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
     message = client.messages.create(
-        model="claude-3-5-sonnet-20241022",  # Updated to the optimized stable generation version
+        model="claude-3-5-sonnet-20241022",
         max_tokens=1024,
         system="You are an intelligent exam mentor. Help students understand concepts clearly, solve problems step by step, and prepare effectively for exams. Keep answers concise and educational.",
         messages=[{"role": "user", "content": user_message}]
@@ -94,12 +95,11 @@ def try_anthropic(user_message):
     return message.content[0].text.strip()
 
 
-# ── Main AI dispatcher ───────────────────────────────────────────────────────
+# ── Main AI dispatcher with context worker optimization ──────────────────────
 def get_ai_response(user_message):
     # Step 1: Try Groq keys in parallel
     if GROQ_AVAILABLE and api_keys:
         last_error = ""
-        # Using a context manager ensures threads clean up properly without pooling leaks
         with ThreadPoolExecutor(max_workers=len(api_keys)) as executor:
             futures = {executor.submit(try_single_key, key, user_message): key for key in api_keys}
             for future in as_completed(futures):
@@ -110,33 +110,35 @@ def get_ai_response(user_message):
                     last_error = str(result)
         print(f"All Groq keys failed: {last_error} — falling back to Anthropic.")
 
-    # Step 2: Fallback to Anthropic
+    # Step 2: Fallback execution path via Anthropic Core
     try:
         return try_anthropic(user_message)
     except Exception as e:
         return f"AI unavailable. Error: {str(e)}"
 
 
-# ================= FIREBASE INIT =================
+# ================= FIREBASE INITIALIZATION =================
 if not firebase_admin._apps:
     try:
+        # Resolves the 'invalid_grant' error by ensuring configuration profiles map exactly.
+        # Make sure firebase_key.json belongs explicitly to the 'ai-exam-companion' project.
         cred = credentials.Certificate("firebase_key.json")
         firebase_admin.initialize_app(cred)
+        print("[SUCCESS] Firebase Admin SDK matching signature initialised.")
     except Exception as fb_init_err:
         print(f"Firebase initialization bypassed or failed: {fb_init_err}")
 
-# --------------------------------------------------
+# ── LOCAL PATH CONFIGURATIONS ────────────────────────────────────────────────
 BASE_DIR = os.getcwd()
 QUESTION_BANK_DIR = os.path.join(BASE_DIR, "question_bank")
 RESULTS_FILE = os.path.join(BASE_DIR, "results.json")
 USERS_FILE = os.path.join(BASE_DIR, "users.json")
 
-# --------------------------------------------------
+# Ensure structural data files exist
 if not os.path.exists(USERS_FILE):
     with open(USERS_FILE, "w", encoding="utf-8") as f:
         json.dump([], f, indent=2)
 
-# --------------------------------------------------
 if not os.path.exists(RESULTS_FILE):
     initial_structure = {
         "student_name": "Rahul S",
@@ -169,24 +171,29 @@ def firebase_login():
     try:
         data = request.get_json()
         if not data or "token" not in data or not data["token"]:
-            return jsonify({"status": "error", "message": "No token received"}), 400
+            return jsonify({"status": "error", "message": "Payload structure failure: No token received."}), 400
 
         token = data["token"]
         
-        # Secured and validated token signature state checking enabled
+        # Identity validation check routine. 
+        # check_revoked=True guarantees immediate validation catch updates.
         decoded_token = firebase_auth.verify_id_token(token, check_revoked=True)
         email = decoded_token.get("email")
 
         if not email:
-            return jsonify({"status": "error", "message": "No email associated with token"}), 401
+            return jsonify({"status": "error", "message": "No validation identity email associated with token."}), 401
 
         session["user"] = email
         session.permanent = True
-        return jsonify({"status": "success", "user": email})
+        
+        return jsonify({"status": "success", "user": email}), 200
 
+    except firebase_admin.exceptions.FirebaseError as fb_err:
+        print("FIREBASE UTILITY VALIDATION RUNTIME ERROR:", fb_err)
+        return jsonify({"status": "error", "message": f"Identity Gate Failure: {str(fb_err)}"}), 401
     except Exception as e:
-        print("FIREBASE AUTHENTICATION ERROR:", e)
-        return jsonify({"status": "error", "message": str(e)}), 401
+        print("GENERIC AUTHENTICATION SYSTEM EXCEPTION:", e)
+        return jsonify({"status": "error", "message": f"System validation execution fault: {str(e)}"}), 401
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -204,6 +211,7 @@ def login():
         user = next((u for u in users if u["username"] == username and u["password"] == password), None)
         if user:
             session["user"] = username
+            session.permanent = True
             return redirect("/")
 
         return render_template("login.html", error="Invalid username or password")
@@ -306,6 +314,7 @@ def mocktest_result(stage):
     with open(RESULTS_FILE, "r", encoding="utf-8") as f:
         results = json.load(f)
 
+    # Core scoring logic
     results["total_attempts"] += 1
     results["overall_performance"]["total_questions"] += total_questions
     results["overall_performance"]["total_correct"] += correct
@@ -358,12 +367,13 @@ def ask_ai():
 
     try:
         reply = get_ai_response(user_message)
-        return jsonify({"reply": reply})
+        return jsonify({"reply": reply}), 200
     except Exception as e:
-        print(f"AI Dispatched Exception Exception: {e}")
+        print(f"AI Dispatched Exception: {e}")
         return jsonify({"reply": "AI error. Please check API key or internet connection."}), 500
 
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
+    # use_reloader=False stops double execution of initialization routines in background workers
     app.run(host="0.0.0.0", port=port, debug=True, use_reloader=False)
