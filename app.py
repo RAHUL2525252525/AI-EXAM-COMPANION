@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify, abort, redirect, ses
 import json
 import os
 import random
+import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # ================= FIREBASE ADMIN =================
@@ -9,12 +10,14 @@ import firebase_admin
 from firebase_admin import credentials, auth as firebase_auth
 
 app = Flask(__name__)
-# Keep application sessions secure
 app.secret_key = os.environ.get("SECRET_KEY", "fallback_secret")
+
+# File synchronization lock to prevent JSON read/write corruption
+file_lock = threading.Lock()
 
 # 🔥 SESSION COOKIE CONFIGURATION
 app.config['SESSION_COOKIE_SAMESITE'] = "Lax"
-app.config['SESSION_COOKIE_SECURE'] = False  # Set to True when deploying over production HTTPS!
+app.config['SESSION_COOKIE_SECURE'] = False  # Change to True when deployed over production HTTPS
 
 # ================= GROQ CONFIG =================
 try:
@@ -97,7 +100,6 @@ def try_anthropic(user_message):
 
 # ── Main AI dispatcher with context worker optimization ──────────────────────
 def get_ai_response(user_message):
-    # Step 1: Try Groq keys in parallel
     if GROQ_AVAILABLE and api_keys:
         last_error = ""
         with ThreadPoolExecutor(max_workers=len(api_keys)) as executor:
@@ -108,23 +110,20 @@ def get_ai_response(user_message):
                     return result
                 else:
                     last_error = str(result)
-        print(f"All Groq keys failed: {last_error} — falling back to Anthropic.")
+        print(f"All Groq keys exhausted or failed: {last_error} — routing to Anthropic Core.")
 
-    # Step 2: Fallback execution path via Anthropic Core
     try:
         return try_anthropic(user_message)
     except Exception as e:
-        return f"AI unavailable. Error: {str(e)}"
+        return f"AI dispatch platform currently unavailable. Error: {str(e)}"
 
 
 # ================= FIREBASE INITIALIZATION =================
 if not firebase_admin._apps:
     try:
-        # Resolves the 'invalid_grant' error by ensuring configuration profiles map exactly.
-        # Make sure firebase_key.json belongs explicitly to the 'ai-exam-companion' project.
         cred = credentials.Certificate("firebase_key.json")
         firebase_admin.initialize_app(cred)
-        print("[SUCCESS] Firebase Admin SDK matching signature initialised.")
+        print("[SUCCESS] Firebase Admin SDK matching signature initialized.")
     except Exception as fb_init_err:
         print(f"Firebase initialization bypassed or failed: {fb_init_err}")
 
@@ -134,7 +133,7 @@ QUESTION_BANK_DIR = os.path.join(BASE_DIR, "question_bank")
 RESULTS_FILE = os.path.join(BASE_DIR, "results.json")
 USERS_FILE = os.path.join(BASE_DIR, "users.json")
 
-# Ensure structural data files exist
+# Ensure structural data files exist safely
 if not os.path.exists(USERS_FILE):
     with open(USERS_FILE, "w", encoding="utf-8") as f:
         json.dump([], f, indent=2)
@@ -174,9 +173,6 @@ def firebase_login():
             return jsonify({"status": "error", "message": "Payload structure failure: No token received."}), 400
 
         token = data["token"]
-        
-        # Identity validation check routine. 
-        # check_revoked=True guarantees immediate validation catch updates.
         decoded_token = firebase_auth.verify_id_token(token, check_revoked=True)
         email = decoded_token.get("email")
 
@@ -185,19 +181,19 @@ def firebase_login():
 
         session["user"] = email
         session.permanent = True
-        
         return jsonify({"status": "success", "user": email}), 200
 
     except firebase_admin.exceptions.FirebaseError as fb_err:
-        print("FIREBASE UTILITY VALIDATION RUNTIME ERROR:", fb_err)
         return jsonify({"status": "error", "message": f"Identity Gate Failure: {str(fb_err)}"}), 401
     except Exception as e:
-        print("GENERIC AUTHENTICATION SYSTEM EXCEPTION:", e)
         return jsonify({"status": "error", "message": f"System validation execution fault: {str(e)}"}), 401
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    if "user" in session:
+        return redirect("/")
+        
     if request.method == "POST":
         username = (request.form.get("username") or request.form.get("email") or "").strip()
         password = (request.form.get("password") or "").strip()
@@ -311,29 +307,37 @@ def mocktest_result(stage):
     wrong = total_questions - correct
     accuracy = round((correct / total_questions) * 100, 2) if total_questions > 0 else 0
 
-    with open(RESULTS_FILE, "r", encoding="utf-8") as f:
-        results = json.load(f)
+    # Thread lock acquisition protects local updates from write collisions
+    with file_lock:
+        with open(RESULTS_FILE, "r", encoding="utf-8") as f:
+            results = json.load(f)
 
-    # Core scoring logic
-    results["total_attempts"] += 1
-    results["overall_performance"]["total_questions"] += total_questions
-    results["overall_performance"]["total_correct"] += correct
-    results["overall_performance"]["total_wrong"] += wrong
+        results["total_attempts"] += 1
+        results["overall_performance"]["total_questions"] += total_questions
+        results["overall_performance"]["total_correct"] += correct
+        results["overall_performance"]["total_wrong"] += wrong
 
-    total_q = results["overall_performance"]["total_questions"]
-    total_c = results["overall_performance"]["total_correct"]
+        total_q = results["overall_performance"]["total_questions"]
+        total_c = results["overall_performance"]["total_correct"]
 
-    if total_q > 0:
-        results["overall_performance"]["overall_accuracy"] = round((total_c / total_q) * 100, 2)
+        if total_q > 0:
+            results["overall_performance"]["overall_accuracy"] = round((total_c / total_q) * 100, 2)
 
-    results["attempt_history"].append({
-        "stage": stage,
-        "score": score,
-        "accuracy": accuracy
-    })
+        results["attempt_history"].append({
+            "stage": stage,
+            "score": score,
+            "accuracy": accuracy
+        })
+        
+        # Update stage summaries safely
+        stage_key = f"stage{stage}"
+        if stage_key in results.get("stage_summary", {}):
+            results["stage_summary"][stage_key]["attempts"] += 1
+            if score > results["stage_summary"][stage_key]["best_score"]:
+                results["stage_summary"][stage_key]["best_score"] = score
 
-    with open(RESULTS_FILE, "w", encoding="utf-8") as f:
-        json.dump(results, f, indent=2)
+        with open(RESULTS_FILE, "w", encoding="utf-8") as f:
+            json.dump(results, f, indent=2)
 
     return render_template("mocktest_result.html", stage=stage, score=score)
 
@@ -375,5 +379,4 @@ def ask_ai():
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
-    # use_reloader=False stops double execution of initialization routines in background workers
     app.run(host="0.0.0.0", port=port, debug=True, use_reloader=False)
